@@ -53,6 +53,6 @@
   },
   "peerDependencies": {
     "svelte": "catalog:",
-    "vite": "catalog:"
+    "vite": "^0.2.8 || ^8.0.0"
   }
 }

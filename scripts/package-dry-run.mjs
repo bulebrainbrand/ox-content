@@ -17,6 +17,7 @@ const packages = [
 ];
 const packDir = mkdtempSync(join(tmpdir(), "ox-content-pack-"));
 const failures = [];
+const publicVitePeerRange = "^0.2.8 || ^8.0.0";
 
 try {
   for (const packageDir of packages) {
@@ -39,6 +40,7 @@ console.log("Package dry-run checks passed.");
 function checkPackage(packageDir) {
   const pkg = JSON.parse(readFileSync(join(packageDir, "package.json"), "utf8"));
   const packed = pack(packageDir);
+  const packedPkg = readPackedPackageJson(packed.filename);
   /** @type {Set<string>} */
   const files = new Set(packed.files.map((file) => String(file.path)));
 
@@ -48,10 +50,39 @@ function checkPackage(packageDir) {
   }
 
   requirePackedFile(files, "package.json", pkg.name);
-  checkPackageJsonReferences(pkg, files);
+  checkPackageJsonReferences(packedPkg, files);
+  checkVitePeerDependency(packedPkg);
 
   if (pkg.name === "@ox-content/napi") {
     checkNapiPackage(packageDir, pkg, files);
+  }
+}
+
+function readPackedPackageJson(filename) {
+  const result = spawnSync("tar", ["-xOf", filename, "package/package.json"], {
+    encoding: "utf8",
+    stdio: ["ignore", "pipe", "pipe"],
+  });
+
+  if (result.error) {
+    throw result.error;
+  }
+  if (result.status !== 0) {
+    throw new Error(result.stderr || `Failed to read package.json from ${filename}`);
+  }
+
+  return JSON.parse(result.stdout);
+}
+
+function checkVitePeerDependency(pkg) {
+  if (!("vite" in (pkg.peerDependencies ?? {}))) {
+    return;
+  }
+
+  if (pkg.peerDependencies.vite !== publicVitePeerRange) {
+    failures.push(
+      `${pkg.name} publishes vite peer ${pkg.peerDependencies.vite}; expected ${publicVitePeerRange}`,
+    );
   }
 }
 
