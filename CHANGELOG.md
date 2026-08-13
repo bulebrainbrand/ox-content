@@ -1,5 +1,11 @@
 # Changelog
 
+## [2.82.1] - 2026-08-13
+
+### Bug Fixes
+
+- publish compatible Vite peer ranges
+
 ## [2.82.0] - 2026-08-13
 
 ### Features
