@@ -1,5 +1,25 @@
 # Changelog
 
+## [2.82.0] - 2026-08-13
+
+### Features
+
+- make cjkEmphasis pair runs against CJK punctuation (#545) (#548)
+- add SolidJS integration (#540) (#546)
+- add boundary-free ox-content rows to the native competitor runner (#524)
+
+### Performance
+
+- chunk-scan JSON string escaping and drop per-number allocations (#522)
+
+### Documentation
+
+- measure and publish CommonMark conformance per engine (#545) (#547)
+- publish TypeScript renderer results (#539)
+- expand built-in features into per-feature guides with live examples (#527)
+- refresh benchmark numbers (#526)
+- retire the "cargo doc for JavaScript" tagline (#525)
+
 ## [2.81.0] - 2026-07-18
 
 ### Features
