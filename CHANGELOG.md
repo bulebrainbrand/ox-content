@@ -1,5 +1,24 @@
 # Changelog
 
+## [2.83.0] - 2026-08-17
+
+### Features
+
+- add detail-tier micro-spans with guard-cost calibration (#562)
+
+### Bug Fixes
+
+- stop the gfm option from disabling its own sub-features (#567)
+
+### Performance
+
+- reuse arena and renderer per call, return plain objects (#570)
+- gate the URL-autolink scan on a required byte (-23% render on prose) (#568)
+- re-enable wasm-opt with the post-MVP feature set (-7% module size) (#566)
+- fold soft line breaks into the running text node (#565)
+- gate and deduplicate the GFM autolink post-pass (#563)
+- win back the md4x benchmark on small documents (#560)
+
 ## [2.82.1] - 2026-08-13
 
 ### Bug Fixes
