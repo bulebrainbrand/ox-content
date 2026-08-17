@@ -1,5 +1,17 @@
 # Changelog
 
+## [2.84.0] - 2026-08-17
+
+### Performance
+
+- walk short inline runs before the chunked scan (+8-16% on the routine) (#575)
+- scan for escapes with SWAR word tests (+40-67% on the routine) (#573)
+- key the heading-id map by CompactString (-43% allocations) (#572)
+
+### Documentation
+
+- refresh the benchmark tables and the ratios quoted around them (#574)
+
 ## [2.83.0] - 2026-08-17
 
 ### Features
