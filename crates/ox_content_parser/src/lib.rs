@@ -63,7 +63,6 @@ macro_rules! profile_span_detail {
 pub(crate) use {profile_span, profile_span_detail};
 
 mod error;
-mod lexer;
 mod parser;
 
 pub use error::{ParseError, ParseResult};
