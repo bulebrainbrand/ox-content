@@ -50,6 +50,36 @@ export async function collectJsRenderers() {
   const md4x = await optional("md4x", () => import("md4x/napi"));
   if (md4x) renderers.push(["md4x (napi)", (input) => md4x.renderToHtml(input)]);
 
+  // Same engine again through its wasm build, so the two runtimes' scores
+  // can be compared directly (and against @ox-content/wasm below).
+  const md4xWasm = await optional("md4x (wasm)", async () => {
+    const mod = await import("md4x/wasm");
+    await mod.init();
+    return mod;
+  });
+  if (md4xWasm) renderers.push(["md4x (wasm)", (input) => md4xWasm.renderToHtml(input)]);
+
+  // Our wasm-pack output is generated (`vp run build:wasm`), not checked in;
+  // score it when the pkg exists so the wasm runtime gets conformance
+  // coverage too.
+  const oxWasm = await optional("@ox-content/wasm", async () => {
+    const { readFileSync } = await import("node:fs");
+    const pkgDir = new URL("../../crates/ox_content_wasm/pkg/", import.meta.url);
+    const mod = await import(new URL("ox_content_wasm.js", pkgDir).href);
+    await mod.default({
+      module_or_path: readFileSync(new URL("ox_content_wasm_bg.wasm", pkgDir)),
+    });
+    return mod;
+  });
+  if (oxWasm) {
+    const probe = oxWasm.parseAndRender("# probe");
+    const render =
+      probe instanceof Map
+        ? (input) => oxWasm.parseAndRender(input).get("html")
+        : (input) => oxWasm.parseAndRender(input).html;
+    renderers.push(["@ox-content/wasm", render]);
+  }
+
   // markdown-it's default preset is not its CommonMark mode; the 'commonmark'
   // preset is what its own docs point at for spec compliance.
   const MarkdownIt = await optional(
@@ -77,7 +107,10 @@ export async function collectJsRenderers() {
     renderers.push([
       "micromark",
       (input) =>
-        micromark.micromark(input, { allowDangerousHtml: true, allowDangerousProtocol: true }),
+        micromark.micromark(input, {
+          allowDangerousHtml: true,
+          allowDangerousProtocol: true,
+        }),
     ]);
   }
 

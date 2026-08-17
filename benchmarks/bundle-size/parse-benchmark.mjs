@@ -4,7 +4,7 @@
  */
 
 import { spawnSync } from "node:child_process";
-import { writeFileSync } from "node:fs";
+import { readFileSync, writeFileSync } from "node:fs";
 import { cpus, totalmem } from "node:os";
 import { performance } from "node:perf_hooks";
 import { dirname, join, resolve } from "node:path";
@@ -469,6 +469,39 @@ async function runBenchmarks() {
     console.log("satteri not available, skipping satteri comparisons\n");
   }
 
+  // Wasm arena. md4x ships a wasm build alongside its NAPI one; ours is the
+  // wasm-pack output under crates/ox_content_wasm/pkg, which is generated
+  // (`vp run build:wasm`) rather than checked in — load both defensively so
+  // the benchmark still runs on a checkout without the artifacts.
+  let md4xWasm = null;
+  try {
+    md4xWasm = await import("md4x/wasm");
+    await md4xWasm.init();
+    console.log("Using md4x/wasm\n");
+  } catch {
+    md4xWasm = null;
+    console.log("md4x/wasm not available, skipping\n");
+  }
+
+  let oxWasmRender = null;
+  try {
+    const pkgDir = new URL("../../crates/ox_content_wasm/pkg/", import.meta.url);
+    const oxWasm = await import(new URL("ox_content_wasm.js", pkgDir).href);
+    const wasmBytes = readFileSync(new URL("ox_content_wasm_bg.wasm", pkgDir));
+    await oxWasm.default({ module_or_path: wasmBytes });
+    // serde-wasm-bindgen returns a Map by default; probe once so the hot
+    // benchmark closure does no shape checks.
+    const probe = oxWasm.parseAndRender("# probe");
+    oxWasmRender =
+      probe instanceof Map
+        ? (input) => oxWasm.parseAndRender(input).get("html")
+        : (input) => oxWasm.parseAndRender(input).html;
+    console.log("Using @ox-content/wasm (crates/ox_content_wasm/pkg)\n");
+  } catch {
+    oxWasmRender = null;
+    console.log("@ox-content/wasm pkg not built (vp run build:wasm), skipping\n");
+  }
+
   // @mizchi/markdown (markdown.mbt) is a MoonBit-authored Markdown compiler
   // shipped as a pure-JS build. Loaded defensively like satteri so an older
   // checkout without the dependency skips it rather than crashing.
@@ -566,12 +599,25 @@ async function runBenchmarks() {
     { name: "remark", fn: (input) => remarkParseProcessor.parse(input) },
   );
 
+  if (md4xWasm) {
+    parsers.push({
+      name: "md4x (wasm)",
+      fn: (input) => md4xWasm.parseAST(input),
+    });
+  }
+
   if (satteri) {
-    parsers.push({ name: "satteri", fn: (input) => satteri.markdownToMdast(input) });
+    parsers.push({
+      name: "satteri",
+      fn: (input) => satteri.markdownToMdast(input),
+    });
   }
 
   if (mizchi) {
-    parsers.push({ name: "@mizchi/markdown", fn: (input) => mizchi.parse(input) });
+    parsers.push({
+      name: "@mizchi/markdown",
+      fn: (input) => mizchi.parse(input),
+    });
   }
 
   if (tanstackMarkdown) {
@@ -610,12 +656,29 @@ async function runBenchmarks() {
     },
   );
 
+  if (oxWasmRender) {
+    renderers.push({ name: "@ox-content/wasm", fn: oxWasmRender });
+  }
+
+  if (md4xWasm) {
+    renderers.push({
+      name: "md4x (wasm)",
+      fn: (input) => md4xWasm.renderToHtml(input),
+    });
+  }
+
   if (satteri) {
-    renderers.push({ name: "satteri", fn: (input) => satteri.markdownToHtml(input) });
+    renderers.push({
+      name: "satteri",
+      fn: (input) => satteri.markdownToHtml(input),
+    });
   }
 
   if (mizchi) {
-    renderers.push({ name: "@mizchi/markdown", fn: (input) => mizchi.toHtml(input) });
+    renderers.push({
+      name: "@mizchi/markdown",
+      fn: (input) => mizchi.toHtml(input),
+    });
   }
 
   if (tanstackMarkdown) {
