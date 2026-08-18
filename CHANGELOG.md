@@ -1,5 +1,25 @@
 # Changelog
 
+## [2.86.0] - 2026-08-18
+
+### Performance
+
+- classify escape bytes with a SIMD nibble lookup (-8% render) (#588)
+- classify inline markers with a SIMD nibble lookup (-9% parse) (#587)
+- gate URL autolinking on `://` instead of `:` (-7% render) (#586)
+- stop re-probing for a table on every table row (-13% on the span) (#585)
+- fuse the code-span newline probe into the closer scan (-3% parse) (#584)
+- skip fenced-code interiors in the pre-pass (-3% parse) (#583)
+- cover the escape tail with an overlapping word read (-4% render) (#582)
+- let the table probe hand back the line end (-2% parse) (#581)
+- reject autolink candidates on `://` instead of `:` (-4% parse) (#579)
+- reserve inline children from the content length (-4% parse) (#577)
+- scan pre-pass lines with SWAR instead of memchr (-10% on the pass) (#576)
+
+### Refactoring
+
+- move the inline reserve heuristic beside push_text (#578)
+
 ## [2.85.0] - 2026-08-18
 
 ### Performance
