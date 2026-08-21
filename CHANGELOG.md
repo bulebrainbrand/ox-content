@@ -1,5 +1,20 @@
 # Changelog
 
+## [2.87.0] - 2026-08-21
+
+### Features
+
+- composable theme presets — 27 skins × 45 colour schemes (#589)
+
+### Bug Fixes
+
+- make build:npm reach the nested theme packages (#590)
+- satisfy the two lints Rust 1.98 turned on (#591)
+
+### Documentation
+
+- generate the gallery at build time, and show every preset (#592)
+
 ## [2.86.0] - 2026-08-18
 
 ### Performance
