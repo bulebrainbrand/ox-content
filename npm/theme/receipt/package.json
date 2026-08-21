@@ -1,0 +1,63 @@
+{
+  "name": "@ox-content/theme-receipt",
+  "version": "2.84.0",
+  "description": "A thermal roll — one narrow centred column, dotted leaders and a torn edge — an Ox Content skin that composes with any @ox-content/theme-color-* scheme",
+  "keywords": [
+    "documentation",
+    "markdown",
+    "monospace",
+    "narrow",
+    "ox-content",
+    "print",
+    "receipt",
+    "skin",
+    "ssg",
+    "theme",
+    "thermal"
+  ],
+  "license": "MIT",
+  "author": "ubugeeei",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/ubugeeei-prod/ox-content.git",
+    "directory": "npm/theme/receipt"
+  },
+  "files": [
+    "dist"
+  ],
+  "type": "module",
+  "sideEffects": false,
+  "main": "./dist/index.cjs",
+  "types": "./dist/index.d.mts",
+  "exports": {
+    ".": {
+      "import": "./dist/index.mjs",
+      "require": "./dist/index.cjs",
+      "types": "./dist/index.d.mts"
+    }
+  },
+  "publishConfig": {
+    "access": "public",
+    "provenance": true
+  },
+  "scripts": {
+    "build": "vp pack",
+    "dev": "vp pack --watch",
+    "typecheck": "tsgo --noEmit"
+  },
+  "devDependencies": {
+    "@ox-content/vite-plugin": "workspace:*",
+    "@types/node": "catalog:",
+    "@typescript/native-preview": "catalog:",
+    "typescript": "catalog:",
+    "vite-plus": "catalog:"
+  },
+  "peerDependencies": {
+    "@ox-content/vite-plugin": ">=2.84.0"
+  },
+  "peerDependenciesMeta": {
+    "@ox-content/vite-plugin": {
+      "optional": true
+    }
+  }
+}

@@ -1,0 +1,228 @@
+/* Liquid Glass, part two: the geometry the material is applied to, and the
+ * content it frames. Split from the material itself only because the two
+ * together exceed the repository's per-file line limit. */
+
+/* --- Concentric geometry -------------------------------------------------- */
+
+/* Capsules for anything that is a control, a large concentric radius for
+ * anything that is a surface. */
+.hero-action,
+.search-button,
+.theme-toggle,
+.social-link,
+.mobile-footer-btn,
+.search-input,
+.nav-link,
+.toc-link {
+  border-radius: 999px;
+}
+
+.feature-card,
+.hero-notice,
+.content pre,
+.content blockquote,
+.content img,
+.content table {
+  border-radius: var(--octc-lg-r);
+}
+
+.search-modal {
+  border-radius: calc(var(--octc-lg-r) + 6px);
+}
+
+/* iOS floats a compact bar over the content rather than spanning the frame with
+ * one. A full-width pane is a page header wearing a blur; a short capsule the
+ * article passes beneath is the material doing its job. */
+.header {
+  --octc-lg-rim: 8px;
+  top: 0.85rem;
+  left: 50%;
+  right: auto;
+  transform: translateX(-50%);
+  width: max-content;
+  max-width: calc(100% - 1.6rem);
+  gap: 1.25rem;
+  border-radius: 999px;
+  padding-inline: 1.15rem;
+  height: calc(var(--octc-header-height) - 1.4rem);
+}
+.layout {
+  padding-top: calc(var(--octc-header-height) + 0.7rem);
+}
+.header-title {
+  font-weight: 620;
+  letter-spacing: -0.015em;
+}
+
+.search-button,
+.theme-toggle,
+.social-link {
+  --octc-lg-rim: 7px;
+}
+.nav-link.active {
+  --octc-lg-rim: 8px;
+}
+
+/* --- Chrome that stays quiet ---------------------------------------------- */
+
+/* The sidebar floats as its own inset slab rather than a flush column, so the
+ * wallpaper shows around it and the article slides beneath its lower edge. */
+.sidebar {
+  /* The guard owns this surface, so the tint has to be declared through the
+     variable — setting `background` here would simply be overridden. */
+  --octc-skin-sidebar-bg: var(--octc-lg-tint);
+  --octc-lg-rim: 10px;
+  position: fixed;
+  top: calc(var(--octc-header-height) + 1.1rem);
+  bottom: 1.1rem;
+  left: 0.9rem;
+  width: calc(var(--octc-sidebar-width) - 1.2rem);
+  border-radius: var(--octc-lg-r);
+  border: 0;
+  padding: 1rem 0.75rem;
+  background: var(--octc-lg-tint);
+  backdrop-filter: blur(20px) saturate(180%);
+  -webkit-backdrop-filter: blur(20px) saturate(180%);
+  box-shadow: 0 10px 30px -14px var(--octc-lg-underlight);
+}
+.toc {
+  border-left: 0;
+}
+.nav-title,
+.toc-title {
+  font-size: 0.7rem;
+  letter-spacing: 0.11em;
+  text-transform: uppercase;
+  opacity: 0.62;
+}
+.nav-link:not(.active):hover,
+.toc-link:hover {
+  background: color-mix(in srgb, var(--octc-color-primary) 10%, transparent);
+}
+.nav-link.active {
+  font-weight: 620;
+}
+
+/* --- Content -------------------------------------------------------------- */
+
+.content h2 {
+  border-bottom: 1px solid color-mix(in srgb, var(--octc-color-border) 32%, transparent);
+}
+.content :not(pre) > code {
+  border-radius: 8px;
+  background: color-mix(in srgb, var(--octc-color-primary) 11%, transparent);
+  padding: 0.1em 0.42em;
+}
+.content pre {
+  border: 0;
+  box-shadow: 0 14px 36px -20px var(--octc-lg-underlight);
+}
+.content blockquote {
+  --octc-lg-rim: 10px;
+}
+.content table {
+  overflow: hidden;
+}
+.content th,
+.content td {
+  border-color: color-mix(in srgb, var(--octc-color-border) 26%, transparent);
+}
+.content hr {
+  height: 1px;
+  border: 0;
+  background: color-mix(in srgb, var(--octc-color-border) 45%, transparent);
+}
+
+/* --- Entry page ----------------------------------------------------------- */
+
+/* The page is content, not a pane. Earlier versions made the hero itself a
+ * sheet of glass, which is backwards: the material belongs to the controls
+ * sitting on the page, and the page is simply what they refract. A restrained
+ * ground gives the rim something to bend without becoming the subject. */
+.hero {
+  background-image:
+    radial-gradient(
+      40% 34% at 22% 16%,
+      color-mix(in srgb, var(--octc-accent-a, var(--octc-color-primary)) 30%, transparent),
+      transparent 72%
+    ),
+    radial-gradient(
+      36% 32% at 80% 76%,
+      color-mix(in srgb, var(--octc-accent-c, var(--octc-color-primary)) 24%, transparent),
+      transparent 74%
+    );
+  background-size: cover;
+  background-repeat: no-repeat;
+  background-attachment: fixed;
+}
+
+.hero-name {
+  letter-spacing: -0.035em;
+  font-weight: 660;
+}
+.hero-action {
+  --octc-lg-rim: 9px;
+  font-weight: 620;
+  padding-inline: 2rem;
+}
+
+/* Interaction is a lift and a widening rim — the lens deepening — rather than a
+ * sweep of light across the face. */
+.hero-action:hover,
+.feature-card:hover,
+.search-button:hover,
+.theme-toggle:hover,
+.social-link:hover {
+  --octc-lg-rim: 15px;
+  transform: translateY(-2px);
+}
+.hero-action:active,
+.search-button:active,
+.theme-toggle:active,
+.social-link:active {
+  --octc-lg-rim: 5px;
+  transform: translateY(0) scale(0.985);
+}
+
+.features .feature-card {
+  padding: 1.4rem;
+}
+
+:focus-visible {
+  outline: 2px solid var(--octc-color-primary);
+  outline-offset: 4px;
+  border-radius: 999px;
+}
+
+/* The rim trick needs mask compositing; without it the ring would fill the whole
+ * shape and wash the panel out, so fall back to a plain hairline edge. */
+@supports not ((mask-composite: exclude) or (-webkit-mask-composite: xor)) {
+  .header::before,
+  .search-modal::before,
+  .feature-card::before,
+  .hero-action::before,
+  .search-button::before,
+  .theme-toggle::before,
+  .social-link::before,
+  .nav-link.active::before,
+  .header::after,
+  .search-modal::after,
+  .feature-card::after,
+  .hero-action::after,
+  .search-button::after,
+  .theme-toggle::after,
+  .social-link::after,
+  .nav-link.active::after {
+    display: none;
+  }
+  .header,
+  .search-modal,
+  .feature-card,
+  .hero-action,
+  .search-button,
+  .theme-toggle,
+  .social-link,
+  .nav-link.active {
+    border: 1px solid color-mix(in srgb, var(--octc-color-border) 45%, transparent);
+  }
+}
