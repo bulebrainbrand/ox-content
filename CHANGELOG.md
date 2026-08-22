@@ -1,5 +1,20 @@
 # Changelog
 
+## [2.89.0] - 2026-08-22
+
+### Features
+
+- complete bare mode and let ssg.render take a theme component (#612)
+
+### Bug Fixes
+
+- stop inlining package imports into .ts templates (#611)
+
+### Performance
+
+- copy short escape runs without memmove (#610)
+- stop walking the arena AST to drop it (#606)
+
 ## [2.88.0] - 2026-08-22
 
 ### Bug Fixes
