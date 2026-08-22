@@ -1,5 +1,5 @@
 use clap::{Parser, Subcommand, ValueEnum};
-use ox_content_i18n_checker::diagnostic::{format_diagnostics, OutputFormat};
+use ox_content_i18n_checker::diagnostic::{OutputFormat, format_diagnostics};
 
 #[derive(Parser)]
 #[command(name = "ox-content-i18n", about = "i18n tools for Ox Content")]
@@ -114,12 +114,10 @@ fn main() {
                             }
                         }
                     }
-                    if ast {
-                        if let Ok(json) = serde_json::to_string_pretty(&parsed_ast) {
-                            #[allow(clippy::print_stdout)]
-                            {
-                                println!("\nAST:\n{json}");
-                            }
+                    if ast && let Ok(json) = serde_json::to_string_pretty(&parsed_ast) {
+                        #[allow(clippy::print_stdout)]
+                        {
+                            println!("\nAST:\n{json}");
                         }
                     }
                 }

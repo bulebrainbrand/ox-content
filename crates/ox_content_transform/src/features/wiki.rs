@@ -61,11 +61,11 @@ fn wiki_target_to_url(target: &str, base_url: &str) -> String {
         normalized.push('/');
     }
     let mut url = join_base_url(base_url, &normalized);
-    if let Some(anchor) = anchor {
-        if !anchor.is_empty() {
-            url.push('#');
-            slugify_anchor(anchor, &mut url);
-        }
+    if let Some(anchor) = anchor
+        && !anchor.is_empty()
+    {
+        url.push('#');
+        slugify_anchor(anchor, &mut url);
     }
     percent_encode_spaces(&url)
 }
@@ -73,11 +73,7 @@ fn wiki_target_to_url(target: &str, base_url: &str) -> String {
 fn join_base_url(base_url: &str, path: &str) -> String {
     if path.starts_with('/') {
         let base = base_url.trim_end_matches('/');
-        if base.is_empty() || base == "/" {
-            path.to_string()
-        } else {
-            format!("{base}{path}")
-        }
+        if base.is_empty() || base == "/" { path.to_string() } else { format!("{base}{path}") }
     } else {
         let base = if base_url.is_empty() { "/" } else { base_url };
         format!("{}/{}", base.trim_end_matches('/'), path)

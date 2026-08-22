@@ -1,7 +1,7 @@
 use std::path::PathBuf;
 
 use ox_content_allocator::Allocator;
-use ox_content_link_checker::{check_source as link_check_source, CheckOptions, Severity};
+use ox_content_link_checker::{CheckOptions, Severity, check_source as link_check_source};
 use ox_content_parser::{ParseError, Parser, ParserOptions};
 use tower_lsp::lsp_types::{Diagnostic, DiagnosticSeverity, Url};
 
@@ -24,12 +24,11 @@ pub(super) fn markdown_parse_diagnostics(
     // chunk growth on every parse.
     let allocator = Allocator::for_source_len(source.len());
     let parser = Parser::with_options(&allocator, source, ParserOptions::gfm());
-    let diagnostics = match parser.parse() {
+
+    match parser.parse() {
         Ok(_) => Vec::new(),
         Err(error) => vec![parse_error_to_diagnostic(document, offset, error)],
-    };
-
-    diagnostics
+    }
 }
 
 pub(super) fn mdc_diagnostics(

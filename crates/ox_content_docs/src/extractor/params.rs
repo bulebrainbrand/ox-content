@@ -1,10 +1,10 @@
 use oxc_ast::ast::{Function, TSSignature, TSType, TSTypeLiteral};
 use oxc_span::GetSpan;
 
-use crate::string_builder::{join2, join3, StringBuilder};
+use crate::string_builder::{StringBuilder, join2, join3};
 
-use super::model::{DocTag, ParamDoc, ParsedParamTag};
 use super::DocVisitor;
+use super::model::{DocTag, ParamDoc, ParsedParamTag};
 
 impl<'a> DocVisitor<'a> {
     pub(super) fn extract_params_from_formals(
@@ -25,10 +25,10 @@ impl<'a> DocVisitor<'a> {
             .iter()
             .filter_map(|param| Self::binding_pattern_identifier_name(&param.pattern))
             .collect::<Vec<_>>();
-        if let Some(rest) = params.rest.as_ref() {
-            if let Some(name) = Self::binding_pattern_identifier_name(&rest.rest.argument) {
-                reserved_param_names.push(name);
-            }
+        if let Some(rest) = params.rest.as_ref()
+            && let Some(name) = Self::binding_pattern_identifier_name(&rest.rest.argument)
+        {
+            reserved_param_names.push(name);
         }
         let mut used_param_tag_indices = Vec::new();
 

@@ -86,11 +86,7 @@ fn split_import_selector(value: &str) -> (&str, Option<&str>) {
     };
     let selector = value[open + 1..close].trim();
     let path = value[..open].trim_end();
-    if selector.is_empty() {
-        (path, None)
-    } else {
-        (path, Some(selector))
-    }
+    if selector.is_empty() { (path, None) } else { (path, Some(selector)) }
 }
 
 fn resolve_import_path(
@@ -143,11 +139,7 @@ fn parse_line_selector(selector: &str) -> Option<(usize, usize)> {
         });
     let start = start.parse::<usize>().ok()?;
     let end = end.parse::<usize>().ok()?;
-    if start == 0 || end < start {
-        None
-    } else {
-        Some((start, end))
-    }
+    if start == 0 || end < start { None } else { Some((start, end)) }
 }
 
 fn select_line_range(source: &str, start: usize, end: usize) -> Result<&str, String> {
@@ -177,10 +169,10 @@ fn select_named_region<'a>(source: &'a str, name: &str) -> Result<&'a str, Strin
         let trimmed = line.trim();
         if region_start.is_none() && is_region_start(trimmed, name) {
             region_start = Some(cursor + line.len());
-        } else if let Some(start) = region_start {
-            if is_region_end(trimmed, name) {
-                return Ok(&source[start..cursor]);
-            }
+        } else if let Some(start) = region_start
+            && is_region_end(trimmed, name)
+        {
+            return Ok(&source[start..cursor]);
         }
         cursor += line.len();
     }

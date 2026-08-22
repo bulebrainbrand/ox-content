@@ -23,7 +23,7 @@ use normalize::normalize_html;
 use ox_content_allocator::Allocator;
 use ox_content_parser::{Parser, ParserOptions};
 use ox_content_renderer::{HtmlRenderer, HtmlRendererOptions};
-use spec_txt::{parse_spec, SpecExample};
+use spec_txt::{SpecExample, parse_spec};
 
 const SPEC: &str = include_str!("spec_fixtures/gfm-extensions-spec.txt");
 const BASELINE: &str = include_str!("spec_fixtures/gfm-known-failures.txt");
@@ -37,11 +37,11 @@ fn render(markdown: &str, section: &str) -> String {
     renderer_options.disallow_raw_html = section.starts_with("Disallowed Raw HTML");
     let parser = Parser::with_options(&allocator, markdown, ParserOptions::gfm());
     let parsed = parser.parse();
-    let rendered = match parsed {
+
+    match parsed {
         Ok(ref document) => HtmlRenderer::with_options(renderer_options).render(document),
         Err(ref error) => format!("<!-- PARSE ERROR: {error:?} -->"),
-    };
-    rendered
+    }
 }
 
 fn failures(examples: &[SpecExample]) -> Vec<(usize, String)> {

@@ -9,10 +9,10 @@ use crate::preview;
 
 use ox_content_mdc_checker::Registry;
 
+use super::Backend;
 use super::assets::{completion_items as asset_completion_items, detect_context, line_prefix};
 use super::mdc::{completion_items as mdc_completion_items, detect_site as detect_mdc_site};
 use super::snippets::markdown_snippet_items;
-use super::Backend;
 
 impl Backend {
     pub(super) async fn completion_response(
@@ -69,12 +69,12 @@ impl Backend {
         // snippet polluting `<Alert |` is just noise.
         let line_text = document.line_text(position.line);
         let prefix = line_prefix(line_text, position.character);
-        if let Some(site) = detect_mdc_site(prefix) {
-            if let Some(registry) = load_mdc_registry(&config) {
-                let items = mdc_completion_items(&site, &registry);
-                if !items.is_empty() {
-                    return Some(CompletionResponse::Array(items));
-                }
+        if let Some(site) = detect_mdc_site(prefix)
+            && let Some(registry) = load_mdc_registry(&config)
+        {
+            let items = mdc_completion_items(&site, &registry);
+            if !items.is_empty() {
+                return Some(CompletionResponse::Array(items));
             }
         }
 

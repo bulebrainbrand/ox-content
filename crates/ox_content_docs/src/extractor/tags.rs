@@ -1,8 +1,8 @@
 use oxc_ast::ast::BindingPattern;
 use oxc_span::GetSpan;
 
-use super::model::{DocTag, ParsedParamTag};
 use super::DocVisitor;
+use super::model::{DocTag, ParsedParamTag};
 
 impl<'a> DocVisitor<'a> {
     fn has_private_tag(tags: &[DocTag]) -> bool {
@@ -68,11 +68,11 @@ impl<'a> DocVisitor<'a> {
 
     fn split_name_and_description(value: &str) -> (&str, &str) {
         let value = value.trim_start();
-        if let Some(rest) = value.strip_prefix('[') {
-            if let Some(close_index) = rest.find(']') {
-                let close_index = close_index + 2;
-                return (&value[..close_index], value[close_index..].trim_start());
-            }
+        if let Some(rest) = value.strip_prefix('[')
+            && let Some(close_index) = rest.find(']')
+        {
+            let close_index = close_index + 2;
+            return (&value[..close_index], value[close_index..].trim_start());
         }
 
         value

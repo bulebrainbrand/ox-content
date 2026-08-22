@@ -27,7 +27,7 @@ use normalize::normalize_html;
 use ox_content_allocator::Allocator;
 use ox_content_parser::{Parser, ParserOptions};
 use ox_content_renderer::{HtmlRenderer, HtmlRendererOptions};
-use spec_txt::{parse_spec, SpecExample};
+use spec_txt::{SpecExample, parse_spec};
 
 const SPEC: &str = include_str!("spec_fixtures/commonmark-0.31.2-spec.txt");
 const BASELINE: &str = include_str!("spec_fixtures/commonmark-known-failures.txt");
@@ -59,11 +59,11 @@ fn render(markdown: &str, mode: &'static str) -> String {
         let allocator = Allocator::new();
         let parser = Parser::with_options(&allocator, &markdown, parser_options(mode));
         let parsed = parser.parse();
-        let rendered = match parsed {
+
+        match parsed {
             Ok(ref document) => HtmlRenderer::with_options(renderer_options()).render(document),
             Err(ref error) => format!("<!-- PARSE ERROR: {error:?} -->"),
-        };
-        rendered
+        }
     });
     result.unwrap_or_else(|panic| {
         let message = panic

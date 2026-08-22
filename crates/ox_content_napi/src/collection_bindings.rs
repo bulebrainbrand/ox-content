@@ -5,7 +5,7 @@ use std::path::{Path, PathBuf};
 use napi::bindgen_prelude::*;
 use napi_derive::napi;
 use ox_content_transform::transformer::MarkdownTransformer;
-use serde_json::{json, Map, Value};
+use serde_json::{Map, Value, json};
 
 use crate::JsTransformOptions;
 
@@ -252,16 +252,17 @@ fn collect_source_files_inner(
                 continue;
             }
             collect_source_files_inner(root, &path, extensions, files);
-        } else if file_type.is_file() && !name.starts_with('.') {
-            if let Some(extension) = markdown_extension(&path_to_slash(&path), extensions) {
-                let relative = path.strip_prefix(root).unwrap_or(&path);
-                files.push(SourceFile {
-                    path_key: path_to_slash(&path),
-                    relative_path: path_to_slash(relative),
-                    path,
-                    extension,
-                });
-            }
+        } else if file_type.is_file()
+            && !name.starts_with('.')
+            && let Some(extension) = markdown_extension(&path_to_slash(&path), extensions)
+        {
+            let relative = path.strip_prefix(root).unwrap_or(&path);
+            files.push(SourceFile {
+                path_key: path_to_slash(&path),
+                relative_path: path_to_slash(relative),
+                path,
+                extension,
+            });
         }
     }
 }

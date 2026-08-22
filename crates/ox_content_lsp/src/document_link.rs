@@ -13,7 +13,7 @@
 use std::path::Path;
 
 use ox_content_allocator::Allocator;
-use ox_content_ast::{walk_link, Image, Link, Span, Visit};
+use ox_content_ast::{Image, Link, Span, Visit, walk_link};
 use ox_content_parser::{Parser, ParserOptions};
 use tower_lsp::lsp_types::{DocumentLink, Url};
 
@@ -82,10 +82,10 @@ impl<'a> Visit<'a> for LinkCollector<'a> {
 fn url_subspan(content: &str, span: Span, url: &str) -> (usize, usize) {
     let span_start = span.start as usize;
     let text = &content[span_start..span.end as usize];
-    if !url.is_empty() {
-        if let Some(rel) = text.rfind(url) {
-            return (span_start + rel, url.len());
-        }
+    if !url.is_empty()
+        && let Some(rel) = text.rfind(url)
+    {
+        return (span_start + rel, url.len());
     }
     (span_start, text.len())
 }

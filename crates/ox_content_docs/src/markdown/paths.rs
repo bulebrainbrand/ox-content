@@ -1,10 +1,10 @@
 use std::path::Path;
 
 use super::{
-    sanitize_doc_path_segment, MarkdownDocsOptions, MarkdownLinkStyle, MarkdownPathStrategy,
+    MarkdownDocsOptions, MarkdownLinkStyle, MarkdownPathStrategy, sanitize_doc_path_segment,
 };
 use crate::model::{ApiDocMember, ApiDocModule};
-use crate::string_builder::{join2, join3, join4, StringBuilder};
+use crate::string_builder::{StringBuilder, join2, join3, join4};
 
 pub(super) fn doc_page_href(
     options: &MarkdownDocsOptions,
@@ -20,10 +20,10 @@ pub(super) fn doc_page_href_from(
     target_file_name: &str,
     anchor: Option<&str>,
 ) -> String {
-    if target_file_name == current_file_name {
-        if let Some(anchor) = anchor.filter(|anchor| !anchor.is_empty()) {
-            return join2("#", anchor);
-        }
+    if target_file_name == current_file_name
+        && let Some(anchor) = anchor.filter(|anchor| !anchor.is_empty())
+    {
+        return join2("#", anchor);
     }
 
     let mut href = String::new();
@@ -81,11 +81,7 @@ fn relative_doc_href_path(current_file_name: &str, target_file_name: &str) -> St
     parts.extend(target_parts.iter().skip(common).copied());
 
     let path = if parts.is_empty() { target_file_name.to_string() } else { parts.join("/") };
-    if path.starts_with("../") {
-        path
-    } else {
-        join2("./", &path)
-    }
+    if path.starts_with("../") { path } else { join2("./", &path) }
 }
 
 fn normalize_base_path(base_path: &str) -> String {
@@ -95,11 +91,7 @@ fn normalize_base_path(base_path: &str) -> String {
         return String::new();
     }
 
-    if base_path.starts_with('/') {
-        base_path.to_string()
-    } else {
-        join2("/", base_path)
-    }
+    if base_path.starts_with('/') { base_path.to_string() } else { join2("/", base_path) }
 }
 
 pub(super) fn entry_anchor(name: &str) -> String {
@@ -146,21 +138,17 @@ pub(super) fn module_display_name(doc: &ApiDocModule) -> String {
     }
 
     let display_name = file_stem(&doc.file);
-    if display_name.is_empty() {
-        doc.file.clone()
-    } else {
-        display_name
-    }
+    if display_name.is_empty() { doc.file.clone() } else { display_name }
 }
 
 fn normalize_doc_file_path(file_path: &str) -> String {
     let normalized = file_path.replace('\\', "/");
 
     for marker in ["npm/", "packages/", "crates/", "src/"] {
-        if let Some(index) = normalized.find(marker) {
-            if index == 0 || normalized.as_bytes().get(index - 1) == Some(&b'/') {
-                return normalized[index..].to_string();
-            }
+        if let Some(index) = normalized.find(marker)
+            && (index == 0 || normalized.as_bytes().get(index - 1) == Some(&b'/'))
+        {
+            return normalized[index..].to_string();
         }
     }
 

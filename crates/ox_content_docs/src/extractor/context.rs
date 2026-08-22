@@ -3,7 +3,7 @@ use std::path::Path;
 use oxc_ast::ast::Comment;
 use rustc_hash::FxHashMap;
 
-use super::jsdoc::{parse_jsdoc_payload, ParsedJsdoc, MODULE_MARKER_TAGS};
+use super::jsdoc::{MODULE_MARKER_TAGS, ParsedJsdoc, parse_jsdoc_payload};
 use super::{DocItem, DocItemKind, DocTag, DocVisitor};
 
 impl<'a> DocVisitor<'a> {
@@ -95,10 +95,10 @@ impl<'a> DocVisitor<'a> {
 
         // Only the leading file comment (before the first statement) can be the
         // module comment; a JSDoc that follows code documents that declaration.
-        if let Some(stmt_start) = first_stmt_start {
-            if comment.span.start > stmt_start {
-                return None;
-            }
+        if let Some(stmt_start) = first_stmt_start
+            && comment.span.start > stmt_start
+        {
+            return None;
         }
 
         // Parse the candidate from its own span rather than the `attached_to`

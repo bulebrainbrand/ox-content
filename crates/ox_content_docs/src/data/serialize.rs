@@ -1,4 +1,4 @@
-use serde_json::{json, Map, Value};
+use serde_json::{Map, Value, json};
 
 use crate::model::{
     ApiDocEntry, ApiDocMember, ApiDocModule, ApiParamDoc, ApiReturnDoc, ApiThrowsDoc,
@@ -221,10 +221,10 @@ fn type_param_to_json(type_param: &ApiTypeParamDoc) -> Value {
 fn normalize_doc_file_path(file_path: &str) -> String {
     let normalized = file_path.replace('\\', "/");
     for prefix in ["npm/", "packages/", "crates/", "src/"] {
-        if let Some(index) = normalized.find(prefix) {
-            if index == 0 || normalized.as_bytes().get(index - 1) == Some(&b'/') {
-                return normalized[index..].to_string();
-            }
+        if let Some(index) = normalized.find(prefix)
+            && (index == 0 || normalized.as_bytes().get(index - 1) == Some(&b'/'))
+        {
+            return normalized[index..].to_string();
         }
     }
 

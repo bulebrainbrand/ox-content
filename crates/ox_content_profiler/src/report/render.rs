@@ -1,10 +1,10 @@
 use std::time::Duration;
 
+use super::Report;
 use super::format::{
     fmt_bytes, fmt_bytes_f, fmt_duration, push_fmt, truncate, write_kv_dur, write_kv_str,
     write_kv_u64,
 };
-use super::Report;
 
 impl Report {
     /// Render a human-readable, monospace-friendly table.
@@ -42,13 +42,16 @@ impl Report {
         }
 
         out.push_str("\n Allocations (per iteration)\n");
-        push_fmt(&mut out, format_args!(
-            "   count       {:>12.1}\n   bytes       {:>12}\n   peak (max)  {:>12}\n   largest     {:>12}\n",
-            self.allocs.mean_allocations,
-            fmt_bytes_f(self.allocs.mean_bytes),
-            fmt_bytes(self.allocs.max_peak_above_baseline),
-            fmt_bytes(self.allocs.largest_single_alloc),
-        ));
+        push_fmt(
+            &mut out,
+            format_args!(
+                "   count       {:>12.1}\n   bytes       {:>12}\n   peak (max)  {:>12}\n   largest     {:>12}\n",
+                self.allocs.mean_allocations,
+                fmt_bytes_f(self.allocs.mean_bytes),
+                fmt_bytes(self.allocs.max_peak_above_baseline),
+                fmt_bytes(self.allocs.largest_single_alloc),
+            ),
+        );
 
         if !self.spans.is_empty() {
             let overhead_ns = self.config.span_overhead_ns;
