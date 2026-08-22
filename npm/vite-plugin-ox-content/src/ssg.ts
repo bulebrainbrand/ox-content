@@ -26,6 +26,8 @@ import type {
 import { resolveTheme, themeToNapi } from "./theme";
 import type { ResolvedThemeConfig, SidebarItem } from "./theme";
 import { normalizeVitePressFrontmatter } from "./vitepress";
+import { renderPage } from "./theme-renderer";
+import type { PageData as ThemePageData } from "./theme-renderer";
 
 /**
  * Navigation item for SSG.
@@ -111,6 +113,11 @@ export function resolveSsgOptions(ssg: SsgOptions | boolean | undefined): Resolv
     extension: ssg.extension ?? ".html",
     clean: ssg.clean ?? false,
     bare: ssg.bare ?? false,
+    render: ssg.render,
+    lang: ssg.lang,
+    head: ssg.head,
+    bodyStart: ssg.bodyStart,
+    bodyEnd: ssg.bodyEnd,
     siteName: ssg.siteName,
     ogImage: ssg.ogImage,
     generateOgImage: ssg.generateOgImage ?? false,
@@ -136,6 +143,34 @@ export function extractTitle(content: string, frontmatter: Record<string, unknow
  */
 export function generateBareHtmlPage(content: string, title: string): string {
   return importNapiModuleSync().generateSsgBareHtml(content, title);
+}
+
+/**
+ * Generates a bare HTML page carrying head metadata and injected markup.
+ *
+ * Bare mode leaves the shell to the consumer, but the metadata here is
+ * already computed for the themed page and cannot be recovered afterwards —
+ * the generated OG image in particular was only discoverable by guessing at
+ * the output directory. A page with none of it set renders exactly what bare
+ * mode emitted before, which keeps the no-JS size baseline honest.
+ */
+export function generateBarePage(page: SsgBarePage): string {
+  return importNapiModuleSync().generateSsgBarePage(page);
+}
+
+/** Head metadata and injected markup for a bare page. */
+export interface SsgBarePage {
+  title: string;
+  content: string;
+  lang?: string;
+  dir?: string;
+  description?: string;
+  canonicalUrl?: string;
+  siteName?: string;
+  ogImage?: string;
+  head?: string;
+  bodyStart?: string;
+  bodyEnd?: string;
 }
 
 /** NAPI-facing nav group shape produced from a [`NavGroup`]. */
@@ -520,16 +555,29 @@ interface CollectedPageResults {
   errors: string[];
 }
 
+/** Result of an SSG build. */
+export interface SsgBuildResult {
+  /** Every file written, HTML pages and generated OG images alike. */
+  files: string[];
+  /** Per-page failures that did not abort the build. */
+  errors: string[];
+  /**
+   * Generated OG image URL per source file, keyed by absolute input path.
+   *
+   * Bare mode renders these into the page itself, but a consumer
+   * post-processing the output had no way to find them short of probing the
+   * output directory for `og-image.png`.
+   */
+  ogImages: Record<string, string>;
+}
+
 /**
  * Builds all markdown files to static HTML.
  */
-export async function buildSsg(
-  options: ResolvedOptions,
-  root: string,
-): Promise<{ files: string[]; errors: string[] }> {
+export async function buildSsg(options: ResolvedOptions, root: string): Promise<SsgBuildResult> {
   const ssgOptions = options.ssg;
   if (!ssgOptions.enabled) {
-    return { files: [], errors: [] };
+    return { files: [], errors: [], ogImages: {} };
   }
 
   const srcDir = path.resolve(root, options.srcDir);
@@ -549,7 +597,11 @@ export async function buildSsg(
   const generatedPages = await generateHtmlPages(context, collected.pageResults, collected, errors);
   await writeGeneratedPages(generatedPages, context, generatedFiles);
 
-  return { files: generatedFiles, errors };
+  return {
+    files: generatedFiles,
+    errors,
+    ogImages: Object.fromEntries(collected.ogImageUrlMap),
+  };
 }
 
 async function cleanOutputDirectory(ssgOptions: ResolvedSsgOptions, outDir: string): Promise<void> {
@@ -817,7 +869,7 @@ async function generateHtmlPages(
       generatedPages.push({
         inputPath: pageResult.inputPath,
         outputPath: pageResult.routePaths.outputPath,
-        html: await renderSsgPage(context, pageResult, collected.ogImageUrlMap),
+        html: await renderSsgPage(context, pageResult, collected, pageResults),
       });
     } catch (err) {
       const errorMessage = err instanceof Error ? err.message : String(err);
@@ -831,17 +883,45 @@ async function generateHtmlPages(
 async function renderSsgPage(
   context: BuildSsgContext,
   pageResult: PageProcessResult,
-  ogImageUrlMap: Map<string, string>,
+  collected: CollectedPageResults,
+  allPageResults: PageProcessResult[],
 ): Promise<string> {
-  if (context.ssgOptions.bare) {
-    return generateBareHtmlPage(pageResult.transformedHtml, pageResult.title);
-  }
-
-  const pageData = createSsgPageData(pageResult);
+  const { ogImageUrlMap } = collected;
   const pageOgImage =
     context.shouldGenerateOgImages && ogImageUrlMap.has(pageResult.inputPath)
       ? ogImageUrlMap.get(pageResult.inputPath)
       : context.ssgOptions.ogImage;
+
+  // A theme component owns the whole document, so it comes before both the
+  // bare shell and the built-in renderer.
+  if (context.ssgOptions.render) {
+    return renderPage(toThemePageData(pageResult), {
+      theme: context.ssgOptions.render,
+      siteName: context.siteName,
+      base: context.base,
+      nav: context.navItems,
+      pages: allPageResults.map(toThemePageData),
+    });
+  }
+
+  if (context.ssgOptions.bare) {
+    return generateBarePage({
+      title: pageResult.title,
+      content: pageResult.transformedHtml,
+      lang:
+        context.ssgOptions.lang ??
+        getPageLocale(pageResult.routePaths.urlPath, context.options.i18n),
+      description: pageResult.description,
+      canonicalUrl: canonicalPageUrl(context, pageResult.routePaths.urlPath),
+      siteName: context.ssgOptions.siteName,
+      ogImage: pageOgImage,
+      head: context.ssgOptions.head,
+      bodyStart: context.ssgOptions.bodyStart,
+      bodyEnd: context.ssgOptions.bodyEnd,
+    });
+  }
+
+  const pageData = createSsgPageData(pageResult);
 
   return generateHtmlPage(
     pageData,
@@ -853,6 +933,39 @@ async function renderSsgPage(
     getPageLocale(pageData.path, context.options.i18n),
     context.options.i18n ? context.options.i18n.locales : undefined,
   );
+}
+
+/** Maps an internal page result onto the theme renderer's page shape. */
+function toThemePageData(pageResult: PageProcessResult): ThemePageData {
+  return {
+    title: pageResult.title,
+    description: pageResult.description,
+    html: pageResult.transformedHtml,
+    toc: pageResult.toc,
+    lastUpdated: pageResult.lastUpdated,
+    path: pageResult.inputPath,
+    url: pageResult.routePaths.href,
+    frontmatter: pageResult.frontmatter,
+    layout:
+      typeof pageResult.frontmatter.layout === "string" ? pageResult.frontmatter.layout : undefined,
+  };
+}
+
+/**
+ * Absolute URL of a page, or `undefined` when `ssg.siteUrl` is not set.
+ *
+ * Built the same way `get_og_image_url` builds the image URL next to it, so
+ * the canonical link and `og:image` always agree about where the page lives.
+ */
+function canonicalPageUrl(context: BuildSsgContext, urlPath: string): string | undefined {
+  const siteUrl = context.ssgOptions.siteUrl?.replace(/\/+$/, "");
+  if (!siteUrl) {
+    return undefined;
+  }
+  if (urlPath === "/" || urlPath === "") {
+    return `${siteUrl}${context.base}`;
+  }
+  return `${siteUrl}${context.base}${urlPath}/`;
 }
 
 function createSsgPageData(pageResult: PageProcessResult): SsgPageData {

@@ -58,6 +58,11 @@ export default defineConfig({
 | `extension`       | `".html"`      | Generated page extension.                            |
 | `clean`           | `false`        | Remove generated output before writing.              |
 | `bare`            | `false`        | Emit unthemed HTML without navigation.               |
+| `render`          | —              | JSX component that owns the whole document.          |
+| `lang`            | `"en"`         | `lang` attribute on `<html>` (bare mode).            |
+| `head`            | —              | Raw markup appended to `<head>` (bare mode).         |
+| `bodyStart`       | —              | Raw markup after `<body>` (bare mode).               |
+| `bodyEnd`         | —              | Raw markup before `</body>` (bare mode).             |
 | `siteName`        | —              | Suffix for `<title>` and OG site name.               |
 | `siteUrl`         | —              | Origin used for absolute OG URLs.                    |
 | `ogImage`         | —              | Static fallback OG image URL.                        |
@@ -68,6 +73,72 @@ export default defineConfig({
 
 Theming — colors, fonts, header, footer, sidebar, custom CSS — is a topic of
 its own: see [Theming](../theming.md).
+
+## Custom Theme Component
+
+`ssg.render` hands the whole document to a JSX component. The component owns
+everything from `<html>` down, so `theme`, `bare` and the head metadata options
+do not apply — nothing is injected that you did not write.
+
+```tsx
+import { createTheme, usePageProps, useSiteConfig } from "@ox-content/vite-plugin";
+
+function DefaultLayout({ children }) {
+  const page = usePageProps();
+  const site = useSiteConfig();
+  return (
+    <html lang="ja">
+      <head>
+        <title>{`${page.title} | ${site.name}`}</title>
+        <link rel="stylesheet" href="/assets/site.css" />
+      </head>
+      <body>{children}</body>
+    </html>
+  );
+}
+
+oxContent({
+  ssg: { render: createTheme({ layouts: { default: DefaultLayout } }) },
+});
+```
+
+`createTheme()` picks the layout named by each page's `layout` frontmatter,
+falling back to `default`. Inside a layout, `usePageProps()` gives the current
+page and `useSiteConfig()` gives the site-wide config including navigation and
+every other page.
+
+This uses the built-in JSX runtime, so configure `jsxImportSource` as described
+in [MDX and JSX](../mdx.md#static-jsx-in-themes).
+
+## Bare Mode
+
+`bare: true` emits the rendered Markdown body without the navigation, layout
+shell or theme styles. It is what you want when the project brings its own
+design system, or when you are measuring the no-JavaScript baseline.
+
+Bare pages still carry the head metadata the plugin already computes — the
+description, `og:*` and `twitter:*` tags, the canonical link, and the generated
+OG image. That metadata only appears when there is something to say: a page
+with no description, no `siteUrl` and no OG image renders exactly the minimal
+document bare mode has always emitted, so the size baseline stays honest.
+
+Everything else is yours to inject:
+
+```ts
+oxContent({
+  ssg: {
+    bare: true,
+    lang: "ja",
+    siteUrl: "https://example.com",
+    head: '<link rel="stylesheet" href="/assets/site.css">',
+    bodyStart: "<header>…</header><main>",
+    bodyEnd: "</main><footer>…</footer>",
+  },
+});
+```
+
+`siteUrl` is what turns on `<link rel="canonical">` and the absolute `og:url`;
+without it those tags are omitted rather than guessed.
 
 ## OG Images
 
@@ -96,9 +167,10 @@ generated image looks like this:
 | `cache`          | `true`   | Skip re-rendering unchanged pages.                    |
 | `concurrency`    | `1`      | Parallel image renders.                               |
 
-Under `bare`, the images are still generated, but nothing references them —
-bare output has no `<head>` for the `<meta>` tags, so inject them from your own
-shell. Each page's image lands next to its HTML, under the page's own route.
+Under `bare`, the images are generated **and referenced**: bare pages carry the
+same `og:image` / `twitter:image` tags the themed pages get. `buildSsg()` also
+returns an `ogImages` map of source path to image URL, so a post-processing
+step does not have to go looking for `og-image.png` in the output tree.
 
 During dev, `/__og-viewer` previews every page's Open Graph metadata and
 image (the `ogViewer` option, on by default):

@@ -5,6 +5,7 @@
 import type { LanguageRegistration, ThemeRegistration } from "shiki";
 import type { ThemeConfig, ResolvedThemeConfig } from "./theme";
 import type { GitHubOptions, OgpOptions, TwitterEmbedOptions } from "./plugins";
+import type { ThemeComponent } from "./theme-renderer";
 
 // =============================================================================
 // Entry Page Types (VitePress-like)
@@ -217,6 +218,60 @@ export interface SsgOptions {
   ogImage?: string;
 
   /**
+   * Render each page with a JSX theme component instead of the built-in
+   * renderer.
+   *
+   * The component owns the whole document, so `theme`, `bare` and the head
+   * metadata options do not apply — everything from `<html>` down is yours.
+   * Compose one per layout with `createTheme()`, and read the current page
+   * through `usePageProps()` / `useSiteConfig()`.
+   *
+   * ```ts
+   * ssg: { render: createTheme({ layouts: { default: DefaultLayout } }) }
+   * ```
+   *
+   * @default undefined
+   */
+  render?: ThemeComponent;
+
+  /**
+   * `lang` attribute for the generated `<html>` element.
+   *
+   * Bare mode uses this verbatim; themed pages derive it from `i18n` instead.
+   *
+   * @default "en"
+   */
+  lang?: string;
+
+  /**
+   * Raw markup appended to `<head>`.
+   *
+   * Bare mode only — themed pages own their head. Use it for the stylesheet
+   * your own build emits, or any tag the plugin does not generate.
+   *
+   * @default undefined
+   */
+  head?: string;
+
+  /**
+   * Raw markup inserted directly after `<body>`.
+   *
+   * Bare mode only. Use it for a site header that wraps the rendered page.
+   *
+   * @default undefined
+   */
+  bodyStart?: string;
+
+  /**
+   * Raw markup inserted directly before `</body>`.
+   *
+   * Bare mode only. Use it for a site footer, or scripts you inject yourself.
+   *
+   * @default undefined
+   */
+  bodyEnd?: string;
+
+  /**
    * Generate one Open Graph image per page.
    *
    * Generated images are written alongside the SSG output and referenced from
@@ -289,6 +344,11 @@ export interface ResolvedSsgOptions {
   extension: string;
   clean: boolean;
   bare: boolean;
+  render?: ThemeComponent;
+  lang?: string;
+  head?: string;
+  bodyStart?: string;
+  bodyEnd?: string;
   siteName?: string;
   ogImage?: string;
   generateOgImage: boolean;
