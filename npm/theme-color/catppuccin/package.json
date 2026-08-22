@@ -1,6 +1,6 @@
 {
   "name": "@ox-content/theme-color-catppuccin",
-  "version": "2.87.0",
+  "version": "2.88.0",
   "description": "Catppuccin Latte and Mocha — an Ox Content color scheme that composes with any @ox-content/theme-* skin",
   "keywords": [
     "catppuccin",

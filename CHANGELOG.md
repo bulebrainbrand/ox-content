@@ -1,5 +1,21 @@
 # Changelog
 
+## [2.88.0] - 2026-08-22
+
+### Bug Fixes
+
+- generate OG images in bare mode (#605)
+- export the ./jsx-runtime subpath (#604)
+- stop rewriting other origins' .md URLs (#603)
+
+### Performance
+
+- reuse first list dispatch result (#599)
+- reject impossible prepass candidates (#597)
+- reuse parsed list siblings (#596)
+- fast-path plain inline text (#595)
+- eliminate default-path allocations (#593)
+
 ## [2.87.0] - 2026-08-21
 
 ### Features
