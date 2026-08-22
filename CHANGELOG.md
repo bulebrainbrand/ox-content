@@ -2,6 +2,14 @@
 
 ## [2.89.0] - 2026-08-22
 
+### Upgrade Notes
+
+- **The Rust crates now require Rust 1.95.0 and build on edition 2024** (#607).
+  The previously declared MSRV of 1.83.0 had not been buildable for some time —
+  `oxc_parser`, `oxc_allocator` and `oxc_ast` all require 1.95.0 — so this
+  corrects the declaration rather than raising the real requirement. The npm
+  packages are unaffected.
+
 ### Features
 
 - complete bare mode and let ssg.render take a theme component (#612)
