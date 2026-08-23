@@ -1,5 +1,43 @@
 # Changelog
 
+## [2.90.0] - 2026-08-23
+
+### Features
+
+- highlight markdown, block and inline (#619)
+- expose the tree-sitter highlighter to JavaScript (#615)
+- cover python, go, java, c, c++ and yaml (#614)
+- add a tree-sitter syntax highlighter (#613)
+
+### Bug Fixes
+
+- sort JSDoc tag keys so checked-in docs.json is stable (#640)
+- keep type cross-reference links after highlighting (#638)
+- emit HTML attribute names, not React prop names (#637)
+- serve every page that asks for the bindings at once (#632)
+- stop truncating generated examples at their first blank line (#626)
+
+### Performance
+
+- intern paragraph-sized nodes so Text cells pack at 32 bytes (#636)
+- scan inline markers 32 bytes at a time with overlapping tails (#635)
+- reserve the document block list from source density (#634)
+- intern large AST nodes so the common cells pack densely (#633)
+- highlight a page off the main thread (#631)
+- spread a page's distinct snippets across threads (#630)
+- load only the grammars a page's pending blocks name (#628)
+- highlight one exotic block without surrendering the page (#625)
+- highlight a repeated snippet once per page (#624)
+- read through the links inside a member type (#623)
+- highlight a page's code without an HTML round trip (#620)
+- render plain-text blocks natively (#617)
+- highlight natively where a grammar exists (#616)
+
+### Documentation
+
+- regenerate the checked-in API reference and fail CI on drift (#639)
+- record the MSRV bump in the v2.89.0 notes
+
 ## [2.89.0] - 2026-08-22
 
 ### Upgrade Notes
