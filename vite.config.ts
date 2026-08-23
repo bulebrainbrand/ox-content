@@ -84,6 +84,7 @@ export default defineConfig({
       ".github/actions/stickydisk/dist/**/*.js",
       "crates/ox_content_napi/index.d.ts",
       "crates/ox_content_ssg/templates/*.html",
+      "docs/content/api/**",
     ],
   },
   lint: {
@@ -260,6 +261,12 @@ export default defineConfig({
 
       "dev:docs": uncachedTask("vp run --filter ./docs dev", {
         dependsOn: ["build:npm"],
+      }),
+      "docs:api": uncachedTask("node scripts/generate-api-docs.mjs --write", {
+        dependsOn: ["build:napi"],
+      }),
+      "check:api-docs": uncachedTask("node scripts/generate-api-docs.mjs --check", {
+        dependsOn: ["build:napi"],
       }),
       "dev:playground": uncachedTask("vp run --filter ./examples/playground dev"),
       "workspace:dev": uncachedTask(
