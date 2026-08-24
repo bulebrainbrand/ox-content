@@ -99,7 +99,9 @@ fn nav_label_is_escaped() {
 #[test]
 fn dropdown_js_closes_on_escape_and_restores_focus() {
     assert!(
-        HEADER_CHROME_JS.contains("Escape") && HEADER_CHROME_JS.contains(".focus("),
+        HEADER_CHROME_JS.contains("Escape")
+            && HEADER_CHROME_JS.contains(".focus(")
+            && HEADER_CHROME_JS.contains(".ox-locale-switcher > button"),
         "{HEADER_CHROME_JS}"
     );
 }
