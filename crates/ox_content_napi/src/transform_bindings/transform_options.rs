@@ -2,9 +2,9 @@ use napi_derive::napi;
 use ox_content_transform::TransformOptions;
 
 use super::{
-    JsAttrsOptions, JsBadgeOptions, JsCodeImportOptions, JsContainerOptions, JsEditThisPageOptions,
-    JsEmojiShortcodeOptions, JsImageOptions, JsIncludeOptions, JsSanitizeOptions, JsStepsOptions,
-    JsWikiLinkOptions,
+    JsAttrsOptions, JsBadgeOptions, JsCardOptions, JsCodeImportOptions, JsContainerOptions,
+    JsEditThisPageOptions, JsEmojiShortcodeOptions, JsImageOptions, JsIncludeOptions,
+    JsSanitizeOptions, JsStepsOptions, JsWikiLinkOptions,
 };
 
 /// Transform options for JavaScript.
@@ -180,6 +180,11 @@ pub struct JsTransformOptions {
     ///
     /// Default: disabled.
     pub images: Option<JsImageOptions>,
+
+    /// Opt-in `::: card` / `::: link-card` / `::: card-grid` blocks.
+    ///
+    /// Default: disabled.
+    pub cards: Option<JsCardOptions>,
 }
 
 impl From<JsTransformOptions> for TransformOptions {
@@ -215,6 +220,7 @@ impl From<JsTransformOptions> for TransformOptions {
             steps: value.steps.map(Into::into),
             badges: value.badges.map(Into::into),
             images: value.images.map(Into::into),
+            cards: value.cards.map(Into::into),
         }
     }
 }

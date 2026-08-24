@@ -356,6 +356,16 @@ export interface JsBuildCollectionManifestOptions {
   transformOptions?: JsTransformOptions
 }
 
+/** Opt-in `::: card` / `::: link-card` / `::: card-grid` blocks. */
+export interface JsCardOptions {
+  /**
+   * Enable card, link-card, and card-grid containers.
+   *
+   * Default: `false`.
+   */
+  enabled?: boolean
+}
+
 /** Extracted fenced code block. */
 export interface JsCodeBlock {
   language: string
@@ -1909,6 +1919,12 @@ export interface JsTransformOptions {
    * Default: disabled.
    */
   images?: JsImageOptions
+  /**
+   * Opt-in `::: card` / `::: link-card` / `::: card-grid` blocks.
+   *
+   * Default: disabled.
+   */
+  cards?: JsCardOptions
 }
 
 /** Type parameter documentation (`<T extends C = D>`) used by generated API docs. */
