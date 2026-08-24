@@ -1,3 +1,4 @@
+import { executeInSandboxIframe } from "./javascript-sandbox";
 import { hasNodeVm } from "./runtime-host";
 import { formatConsoleArgs, StdioBuffer } from "./stdio";
 import { nowMs, PhaseTracker } from "./timing";
@@ -10,8 +11,8 @@ export async function runJavaScript(request: AdapterRequest): Promise<AdapterRes
   const provenance = {
     execute: {
       host: "local",
-      runtime: hasNodeVm() ? "node:vm" : "function",
-      sandbox: hasNodeVm() ? "vm" : "function",
+      runtime: hasNodeVm() ? "node:vm" : "iframe",
+      sandbox: hasNodeVm() ? "vm" : "srcdoc",
     },
   };
 
@@ -56,6 +57,10 @@ export async function executeScript(
     const vm = await import("node:vm");
     const context = vm.createContext({ console: consoleLike });
     return vm.runInContext(code, context, { timeout: timeoutMs, displayErrors: true });
+  }
+
+  if (typeof document !== "undefined") {
+    return executeInSandboxIframe(code, timeoutMs, stdio);
   }
 
   const started = nowMs();
