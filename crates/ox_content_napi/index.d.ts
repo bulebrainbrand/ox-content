@@ -1567,6 +1567,16 @@ export interface JsSsgSidebarItem {
   stickyCollapsed?: boolean
 }
 
+/** Opt-in `::: steps` ordered lists. */
+export interface JsStepsOptions {
+  /**
+   * Enable `::: steps` wrappers around ordered lists.
+   *
+   * Default: `false`.
+   */
+  enabled?: boolean
+}
+
 /** Result of [`super::transform_tabs_embeds`]. */
 export interface JsTabsTransformResult {
   /** HTML with every `<tabs>` block expanded. */
@@ -1892,6 +1902,12 @@ export interface JsTransformOptions {
    * Default: disabled.
    */
   includes?: JsIncludeOptions
+  /**
+   * Opt-in `::: steps` ordered lists.
+   *
+   * Default: disabled.
+   */
+  steps?: JsStepsOptions
   /**
    * Opt-in `{badge:variant}` inline badges.
    *

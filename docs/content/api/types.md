@@ -2,15 +2,15 @@
 
 **[Source](https://github.com/ubugeeei-prod/ox-content/blob/main/npm/vite-plugin-ox-content/src/types.ts)**
 
-> 86 documented symbols. Read the signatures first, then expand each item for parameters, return types, and examples.
+> 88 documented symbols. Read the signatures first, then expand each item for parameters, return types, and examples.
 
 <div class="ox-api-stats" aria-label="API reference summary">
 <span class="ox-api-stat">
-  <strong>86</strong>
+  <strong>88</strong>
   <span>symbols</span>
 </span>
 <span class="ox-api-stat">
-  <strong>79</strong>
+  <strong>81</strong>
   <span>interfaces</span>
 </span>
 <span class="ox-api-stat">
@@ -22,7 +22,7 @@
   <span>modules</span>
 </span>
 <span class="ox-api-stat">
-  <strong>464</strong>
+  <strong>466</strong>
   <span>members</span>
 </span>
 </div>
@@ -1932,7 +1932,7 @@
 </details>
 
 <details id="oxcontentoptions" class="ox-api-entry">
-  <summary><span class="ox-api-entry__kind">interface</span><span class="ox-api-entry__summary-main"><code class="ox-api-entry__signature ox-api-entry__signature--highlighted language-typescript">OxContentOptions</code><span class="ox-api-entry__description">Options for the core oxContent() Vite plugin. The top-level options describe wh…</span><span class="ox-api-entry__meta"><span class="ox-api-badge">41 members</span></span></span></summary>
+  <summary><span class="ox-api-entry__kind">interface</span><span class="ox-api-entry__summary-main"><code class="ox-api-entry__signature ox-api-entry__signature--highlighted language-typescript">OxContentOptions</code><span class="ox-api-entry__description">Options for the core oxContent() Vite plugin. The top-level options describe wh…</span><span class="ox-api-entry__meta"><span class="ox-api-badge">42 members</span></span></span></summary>
   <div class="ox-api-entry__body">
 <div class="ox-api-entry__prose">
 <p>Options for the core <code>oxContent()</code> Vite plugin.</p>
@@ -2124,6 +2124,11 @@
   <td><code>ssg</code><span class="ox-api-badge">optional</span></td>
   <td><code class="ox-api-entry__member-type language-typescript"><a href="#ssgoptions">SsgOptions</a> | boolean</code></td>
   <td><div class="ox-api-entry__member-description">Static Site Generation options.<br><br>Passing <code>true</code> or omitting this option enables SSG with defaults. Passing<br><code>false</code> disables the SSG plugin while still allowing Markdown module<br>transforms to run.</div><div class="ox-api-entry__member-default"><span>Default</span> <code class="language-typescript">{ enabled: true }</code></div></td>
+</tr>
+<tr id="oxcontentoptions-steps">
+  <td><code>steps</code><span class="ox-api-badge">optional</span></td>
+  <td><code class="ox-api-entry__member-type language-typescript">boolean | <a href="#stepsoptions">StepsOptions</a></code></td>
+  <td><div class="ox-api-entry__member-description">Restyle a <code>::: steps</code> wrapper around an ordered list.<br><br>Disabled when omitted or <code>false</code>. <code>true</code> and <code>{}</code> enable the default<br>step-list markup. Ordinary ordered lists outside <code>::: steps</code> are unchanged.</div><div class="ox-api-entry__member-default"><span>Default</span> <code class="language-typescript">false</code></div></td>
 </tr>
 <tr id="oxcontentoptions-strikethrough">
   <td><code>strikethrough</code><span class="ox-api-badge">optional</span></td>
@@ -3209,7 +3214,7 @@
 </details>
 
 <details id="resolvedoptions" class="ox-api-entry">
-  <summary><span class="ox-api-entry__kind">interface</span><span class="ox-api-entry__summary-main"><code class="ox-api-entry__signature ox-api-entry__signature--highlighted language-typescript">ResolvedOptions</code><span class="ox-api-entry__description">Resolved options with all defaults applied.</span><span class="ox-api-entry__meta"><span class="ox-api-badge">41 members</span></span></span></summary>
+  <summary><span class="ox-api-entry__kind">interface</span><span class="ox-api-entry__summary-main"><code class="ox-api-entry__signature ox-api-entry__signature--highlighted language-typescript">ResolvedOptions</code><span class="ox-api-entry__description">Resolved options with all defaults applied.</span><span class="ox-api-entry__meta"><span class="ox-api-badge">42 members</span></span></span></summary>
   <div class="ox-api-entry__body">
 <div class="ox-api-entry__prose">
 <p>Resolved options with all defaults applied.</p>
@@ -3394,6 +3399,11 @@
 <tr id="resolvedoptions-ssg">
   <td><code>ssg</code></td>
   <td><code class="ox-api-entry__member-type language-typescript"><a href="#resolvedssgoptions">ResolvedSsgOptions</a></code></td>
+  <td></td>
+</tr>
+<tr id="resolvedoptions-steps">
+  <td><code>steps</code></td>
+  <td><code class="ox-api-entry__member-type language-typescript"><a href="#resolvedstepsoptions">ResolvedStepsOptions</a></code></td>
   <td></td>
 </tr>
 <tr id="resolvedoptions-strikethrough">
@@ -3693,6 +3703,36 @@
 <tr id="resolvedssgoptions-theme">
   <td><code>theme</code><span class="ox-api-badge">optional</span></td>
   <td><code class="ox-api-entry__member-type language-typescript"><a href="./theme.md#resolvedthemeconfig">ResolvedThemeConfig</a></code></td>
+  <td></td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+  </div>
+</details>
+
+<details id="resolvedstepsoptions" class="ox-api-entry">
+  <summary><span class="ox-api-entry__kind">interface</span><span class="ox-api-entry__summary-main"><code class="ox-api-entry__signature ox-api-entry__signature--highlighted language-typescript">ResolvedStepsOptions</code><span class="ox-api-entry__description">Resolved step-list transform options.</span><span class="ox-api-entry__meta"><span class="ox-api-badge">1 member</span></span></span></summary>
+  <div class="ox-api-entry__body">
+<div class="ox-api-entry__prose">
+<p>Resolved step-list transform options.</p>
+</div>
+<div class="ox-api-entry__section ox-api-entry__section--signature">
+<h4>Signature</h4>
+<pre><code class="language-typescript">export interface ResolvedStepsOptions</code></pre>
+</div>
+<p class="ox-api-entry__source"><a class="ox-api-entry__source-link" href="https://github.com/ubugeeei-prod/ox-content/blob/main/npm/vite-plugin-ox-content/src/types.ts#L1154-L1156" target="_blank" rel="noopener noreferrer">View source<span class="ox-api-entry__source-icon" aria-hidden="true"></span></a></p>
+<div class="ox-api-entry__section ox-api-entry__section--members">
+<h4>Members</h4>
+<div class="ox-api-entry__member-group">
+<h5>Properties</h5>
+<table class="ox-api-entry__members-table">
+<thead><tr><th>Name</th><th>Type</th><th>Description</th></tr></thead>
+<tbody>
+<tr id="resolvedstepsoptions-enabled">
+  <td><code>enabled</code></td>
+  <td><code class="ox-api-entry__member-type language-typescript">boolean</code></td>
   <td></td>
 </tr>
 </tbody>
@@ -4232,6 +4272,36 @@
   <td><code>theme</code><span class="ox-api-badge">optional</span></td>
   <td><code class="ox-api-entry__member-type language-typescript"><a href="./theme.md#themeconfig">ThemeConfig</a> | <a href="./theme.md#themeconfig">ThemeConfig</a>[]</code></td>
   <td><div class="ox-api-entry__member-description">Theme configuration for generated pages.<br><br>Use <code>defineTheme()</code> to build this object so custom theme modules and the<br>default theme extension points keep their expected shape.<br><br>An array composes layers left to right, which is how a skin package and a<br>color package are combined:<br><br>``<code>ts<br>theme: [pixelSkin, tokyoNight, { footer: { copyright: &quot;2026&quot; } }]<br></code>``</div><div class="ox-api-entry__member-default"><span>Default</span> <code class="language-typescript">defaultTheme</code></div></td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+  </div>
+</details>
+
+<details id="stepsoptions" class="ox-api-entry">
+  <summary><span class="ox-api-entry__kind">interface</span><span class="ox-api-entry__summary-main"><code class="ox-api-entry__signature ox-api-entry__signature--highlighted language-typescript">StepsOptions</code><span class="ox-api-entry__description">Options for opt-in ::: steps ordered lists.</span><span class="ox-api-entry__meta"><span class="ox-api-badge">1 member</span></span></span></summary>
+  <div class="ox-api-entry__body">
+<div class="ox-api-entry__prose">
+<p>Options for opt-in <code>::: steps</code> ordered lists.</p>
+</div>
+<div class="ox-api-entry__section ox-api-entry__section--signature">
+<h4>Signature</h4>
+<pre><code class="language-typescript">export interface StepsOptions</code></pre>
+</div>
+<p class="ox-api-entry__source"><a class="ox-api-entry__source-link" href="https://github.com/ubugeeei-prod/ox-content/blob/main/npm/vite-plugin-ox-content/src/types.ts#L1142-L1149" target="_blank" rel="noopener noreferrer">View source<span class="ox-api-entry__source-icon" aria-hidden="true"></span></a></p>
+<div class="ox-api-entry__section ox-api-entry__section--members">
+<h4>Members</h4>
+<div class="ox-api-entry__member-group">
+<h5>Properties</h5>
+<table class="ox-api-entry__members-table">
+<thead><tr><th>Name</th><th>Type</th><th>Description</th></tr></thead>
+<tbody>
+<tr id="stepsoptions-enabled">
+  <td><code>enabled</code><span class="ox-api-badge">optional</span></td>
+  <td><code class="ox-api-entry__member-type language-typescript">boolean</code></td>
+  <td><div class="ox-api-entry__member-description">Enable the steps transform when an options object is supplied.</div><div class="ox-api-entry__member-default"><span>Default</span> <code class="language-typescript">true</code></div></td>
 </tr>
 </tbody>
 </table>

@@ -17,9 +17,11 @@ mod containers;
 mod edit;
 mod emoji;
 mod emoji_shortcodes;
+mod escape;
 mod images;
 mod includes;
 mod segments;
+mod steps;
 mod wiki;
 
 use attributes::transform_attribute_syntax;
@@ -31,9 +33,11 @@ use code_imports::ResolvedCodeImportOptions;
 use containers::ResolvedContainerOptions;
 use edit::append_edit_this_page;
 use emoji_shortcodes::replace_emoji_shortcodes;
+pub(super) use escape::{escape_html_attr, escape_html_text};
 use images::ResolvedImageOptions;
 use includes::ResolvedIncludeOptions;
 use segments::transform_markdown_text_segments;
+use steps::ResolvedStepsOptions;
 use wiki::replace_wiki_links;
 
 #[derive(Clone, Default)]
@@ -43,6 +47,7 @@ pub struct TransformFeatureOptions {
     code_imports: Option<ResolvedCodeImportOptions>,
     containers: Option<ResolvedContainerOptions>,
     includes: Option<ResolvedIncludeOptions>,
+    steps: Option<ResolvedStepsOptions>,
     badges: bool,
     images: Option<ResolvedImageOptions>,
     attributes: bool,
@@ -85,7 +90,13 @@ impl TransformFeatureOptions {
         let source_path = options.source_path.as_deref().filter(|value| !value.is_empty());
         let code_imports = code_imports::resolve(options.code_imports.as_ref(), source_path);
         let attributes = resolve_attrs(options.attributes.as_ref());
-        let containers = containers::resolve(options.containers.as_ref());
+        let steps = steps::resolve(options.steps.as_ref());
+        let mut containers = containers::resolve(options.containers.as_ref());
+        if steps.is_some()
+            && let Some(containers) = containers.as_mut()
+        {
+            containers.types.remove("steps");
+        }
         let includes = includes::resolve(options.includes.as_ref(), source_path);
         let badges = badges::resolve(options.badges.as_ref());
         let images = images::resolve(options.images.as_ref());
@@ -100,6 +111,7 @@ impl TransformFeatureOptions {
             code_imports,
             containers,
             includes,
+            steps,
             badges,
             images,
             attributes,
@@ -113,6 +125,7 @@ impl TransformFeatureOptions {
             || self.code_imports.is_some()
             || self.containers.is_some()
             || self.includes.is_some()
+            || self.steps.is_some()
             || self.badges
             || self.images.is_some()
     }
@@ -167,6 +180,10 @@ pub fn preprocess_markdown<'a>(
         if let Some(replaced) = replaced {
             current = Cow::Owned(replaced);
         }
+    }
+
+    if options.steps.is_some() && current.contains(":::") {
+        current = Cow::Owned(steps::transform(&current));
     }
 
     if let Some(containers) = &options.containers
@@ -271,29 +288,6 @@ fn resolve_edit_this_page(
         source_path: source_path.to_string(),
         label: options.label.clone().unwrap_or_else(|| "Edit this page".to_string()),
     })
-}
-
-pub(super) fn escape_html_text(value: &str, out: &mut String) {
-    for ch in value.chars() {
-        match ch {
-            '&' => out.push_str("&amp;"),
-            '<' => out.push_str("&lt;"),
-            '>' => out.push_str("&gt;"),
-            _ => out.push(ch),
-        }
-    }
-}
-
-pub(super) fn escape_html_attr(value: &str, out: &mut String) {
-    for ch in value.chars() {
-        match ch {
-            '&' => out.push_str("&amp;"),
-            '"' => out.push_str("&quot;"),
-            '<' => out.push_str("&lt;"),
-            '>' => out.push_str("&gt;"),
-            _ => out.push(ch),
-        }
-    }
 }
 
 #[cfg(test)]

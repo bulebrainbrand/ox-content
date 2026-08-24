@@ -676,6 +676,16 @@ export interface OxContentOptions {
   includes?: boolean | IncludeOptions;
 
   /**
+   * Restyle a `::: steps` wrapper around an ordered list.
+   *
+   * Disabled when omitted or `false`. `true` and `{}` enable the default
+   * step-list markup. Ordinary ordered lists outside `::: steps` are unchanged.
+   *
+   * @default false
+   */
+  steps?: boolean | StepsOptions;
+
+  /**
    * Sanitize rendered HTML with safe defaults or explicit allow lists.
    *
    * Enable this for untrusted Markdown. The default allow lists are conservative;
@@ -854,6 +864,7 @@ export interface ResolvedOptions {
   images: ResolvedImageOptions;
   codeImports: ResolvedCodeImportOptions;
   includes: ResolvedIncludeOptions;
+  steps: ResolvedStepsOptions;
   sanitize: ResolvedSanitizeOptions;
   editThisPage: ResolvedEditThisPageOptions;
   cjkEmphasis: boolean;
@@ -1176,6 +1187,25 @@ export interface IncludeOptions {
 export interface ResolvedIncludeOptions {
   enabled: boolean;
   rootDir?: string;
+}
+
+/**
+ * Options for opt-in `::: steps` ordered lists.
+ */
+export interface StepsOptions {
+  /**
+   * Enable the steps transform when an options object is supplied.
+   *
+   * @default true
+   */
+  enabled?: boolean;
+}
+
+/**
+ * Resolved step-list transform options.
+ */
+export interface ResolvedStepsOptions {
+  enabled: boolean;
 }
 
 /**

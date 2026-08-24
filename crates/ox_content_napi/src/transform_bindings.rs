@@ -13,6 +13,7 @@ mod badge_options;
 mod code_blocks;
 mod embed_types;
 mod feature_options;
+mod steps_options;
 mod transform_options;
 
 pub use async_task::TransformTask;
@@ -24,6 +25,7 @@ pub use feature_options::{
     JsContainerTypeOptions, JsDocsTestOptions, JsEditThisPageOptions, JsEmojiShortcodeOptions,
     JsImageOptions, JsIncludeOptions, JsMediaEmbedsOptions, JsSanitizeOptions, JsWikiLinkOptions,
 };
+pub use steps_options::JsStepsOptions;
 pub use transform_options::JsTransformOptions;
 
 impl From<ox_content_transform::TocEntry> for TocEntry {

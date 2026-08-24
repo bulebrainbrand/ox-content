@@ -312,6 +312,11 @@
   <td><code class="ox-api-entry__member-type language-typescript">string</code></td>
   <td><div class="ox-api-entry__member-description">Source file path for relative link resolution.<br>Used to determine if the current file is an index file.</div></td>
 </tr>
+<tr id="jstransformoptions-steps">
+  <td><code>steps</code><span class="ox-api-badge">optional</span></td>
+  <td><code class="ox-api-entry__member-type language-typescript">{ enabled?: boolean }</code></td>
+  <td></td>
+</tr>
 <tr id="jstransformoptions-strikethrough">
   <td><code>strikethrough</code><span class="ox-api-badge">optional</span></td>
   <td><code class="ox-api-entry__member-type language-typescript">boolean</code></td>

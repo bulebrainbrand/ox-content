@@ -3,15 +3,15 @@
   "generatedAt": "2026-06-23T17:24:26.758Z",
   "summary": {
     "modules": 46,
-    "entries": 387,
+    "entries": 389,
     "byKind": {
       "function": 173,
-      "interface": 152,
+      "interface": 154,
       "type": 14,
       "variable": 12,
       "module": 36
     },
-    "members": 844,
+    "members": 849,
     "params": 310,
     "returns": 169,
     "examples": 20,
@@ -9247,6 +9247,26 @@
               "endLine": 285
             },
             {
+              "name": "steps",
+              "kind": "property",
+              "description": "",
+              "type": "{ enabled?: boolean }",
+              "members": [
+                {
+                  "name": "enabled",
+                  "kind": "property",
+                  "description": "",
+                  "type": "boolean",
+                  "optional": true,
+                  "line": 277,
+                  "endLine": 277
+                }
+              ],
+              "optional": true,
+              "line": 276,
+              "endLine": 278
+            },
+            {
               "name": "editThisPage",
               "kind": "property",
               "description": "",
@@ -9438,6 +9458,46 @@
       "file": "npm/vite-plugin-ox-content/src/types.ts",
       "description": "",
       "entries": [
+        {
+          "name": "ResolvedStepsOptions",
+          "kind": "interface",
+          "description": "Resolved step-list transform options.",
+          "members": [
+            {
+              "name": "enabled",
+              "kind": "property",
+              "description": "",
+              "type": "boolean",
+              "line": 1054,
+              "endLine": 1054
+            }
+          ],
+          "file": "npm/vite-plugin-ox-content/src/types.ts",
+          "line": 1053,
+          "endLine": 1055,
+          "signature": "export interface ResolvedStepsOptions"
+        },
+        {
+          "name": "StepsOptions",
+          "kind": "interface",
+          "description": "Options for opt-in `::: steps` ordered lists.",
+          "members": [
+            {
+              "name": "enabled",
+              "kind": "property",
+              "description": "Enable the steps transform when an options object is supplied.",
+              "type": "boolean",
+              "default": "true",
+              "optional": true,
+              "line": 1047,
+              "endLine": 1047
+            }
+          ],
+          "file": "npm/vite-plugin-ox-content/src/types.ts",
+          "line": 1041,
+          "endLine": 1048,
+          "signature": "export interface StepsOptions"
+        },
         {
           "name": "types",
           "kind": "module",
@@ -10324,6 +10384,16 @@
               "endLine": 512
             },
             {
+              "name": "steps",
+              "kind": "property",
+              "description": "Restyle a `::: steps` wrapper around an ordered list.\n\nDisabled when omitted or `false`. `true` and `{}` enable the default\nstep-list markup. Ordinary ordered lists outside `::: steps` are unchanged.",
+              "type": "boolean | StepsOptions",
+              "default": "false",
+              "optional": true,
+              "line": 574,
+              "endLine": 574
+            },
+            {
               "name": "siteMaps",
               "kind": "property",
               "description": "Write crawl manifests next to generated HTML.\n\nOff by default. `true` writes `sitemap.xml`, `robots.txt`, and `llms.txt`.\nAn object enables the feature and overrides only the fields you set.\nRequires `ssg.siteUrl`. When that is missing the build continues and a\nwarning is emitted instead of writing files.",
@@ -10733,6 +10803,14 @@
               "type": "ResolvedSsgOptions",
               "line": 839,
               "endLine": 839
+            },
+            {
+              "name": "steps",
+              "kind": "property",
+              "description": "",
+              "type": "ResolvedStepsOptions",
+              "line": 752,
+              "endLine": 752
             },
             {
               "name": "siteMaps",
