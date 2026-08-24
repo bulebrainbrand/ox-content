@@ -4,6 +4,10 @@ use super::a11y::A11Y_CSS;
 use super::breadcrumbs::resolve_breadcrumbs;
 use super::entry::generate_entry_html;
 use super::footer::{FOOTER_CSS, generate_footer_html};
+use super::header_chrome::{
+    HEADER_CHROME_CSS, HEADER_CHROME_JS, header_chrome_needs_css, header_chrome_needs_js,
+    push_header_chrome_body_classes, render_announcement, render_header_nav, resolve_page_chrome,
+};
 use super::locale_switcher::render_locale_switcher;
 use super::nav::generate_nav_html;
 use super::pagination::resolve_pager;
@@ -16,8 +20,8 @@ use super::utils::{
     wrap_css_section,
 };
 use super::{
-    BarePageTemplate, ENTRY_CSS, GITHUB_CSS, ISLAND_CSS, MERMAID_CSS, NavGroup, OGP_CSS, PageData,
-    PageTemplate, SOCIAL_CSS, SSG_CSS, SSG_JS, SsgConfig, TABS_CSS, TABS_JS, YOUTUBE_CSS,
+    ENTRY_CSS, GITHUB_CSS, ISLAND_CSS, MERMAID_CSS, NavGroup, OGP_CSS, PageData, PageTemplate,
+    SOCIAL_CSS, SSG_CSS, SSG_JS, SsgConfig, TABS_CSS, TABS_JS, YOUTUBE_CSS,
 };
 
 /// Generates a complete HTML page for SSG.
@@ -25,19 +29,31 @@ use super::{
 /// This function creates a full HTML document with navigation sidebar,
 /// content area, table of contents, search functionality, and theme toggle.
 pub fn generate_html(page_data: &PageData, nav_groups: &[NavGroup], config: &SsgConfig) -> String {
-    let nav_html = generate_nav_html(nav_groups, &page_data.path);
-
-    // Theme configuration
     let theme = config.theme.as_ref();
+    let chrome = resolve_page_chrome(
+        config.page_chrome,
+        page_data.chrome,
+        super::aside::aside_enabled(theme),
+    );
+    let nav_html = if chrome.show_sidebar {
+        generate_nav_html(nav_groups, &page_data.path)
+    } else {
+        String::new()
+    };
+    let header_nav_html =
+        theme.and_then(|t| t.nav.as_deref()).map(render_header_nav).unwrap_or_default();
+    let announcement_html =
+        theme.and_then(|t| t.announcement.as_ref()).map(render_announcement).unwrap_or_default();
     let embed = theme.and_then(|t| t.embed.as_ref());
 
     // Generate theme CSS overrides
     let theme_css = theme.map_or(String::new(), generate_theme_css);
 
     // Check if we have a footer
-    let has_footer = theme.is_some_and(|t| {
-        t.footer.as_ref().is_some_and(|f| f.message.is_some() || f.copyright.is_some())
-    });
+    let has_footer = chrome.show_footer
+        && theme.is_some_and(|t| {
+            t.footer.as_ref().is_some_and(|f| f.message.is_some() || f.copyright.is_some())
+        });
     let footer_css = if has_footer { FOOTER_CSS } else { "" };
 
     // Check if this is an entry page
@@ -86,6 +102,9 @@ pub fn generate_html(page_data: &PageData, nav_groups: &[NavGroup], config: &Ssg
     if config.reader_chrome.is_enabled() {
         css_sections.push(wrap_css_section("reader-chrome", READER_CHROME_CSS));
     }
+    if header_chrome_needs_css(&header_nav_html, &announcement_html, chrome) {
+        css_sections.push(wrap_css_section("header-chrome", HEADER_CHROME_CSS));
+    }
     if config.a11y.is_enabled() {
         css_sections.push(wrap_css_section("a11y", A11Y_CSS));
     }
@@ -95,10 +114,13 @@ pub fn generate_html(page_data: &PageData, nav_groups: &[NavGroup], config: &Ssg
 
     let all_css = css_sections.join("");
     let toc_html = generate_toc_html(&page_data.toc);
-    let has_toc = super::aside::has_toc(super::aside::aside_enabled(theme), &toc_html);
+    let has_toc = super::aside::has_toc(chrome.show_outline, &toc_html);
     let pager = resolve_pager(page_data, nav_groups, config.pagination);
     let breadcrumbs = resolve_breadcrumbs(page_data, nav_groups, config);
-    let last_updated = page_data.last_updated.and_then(format_last_updated);
+    let last_updated = chrome
+        .show_last_updated
+        .then(|| page_data.last_updated.and_then(format_last_updated))
+        .flatten();
 
     // Embedded HTML for specific positions
     let embed_head = embed.and_then(|e| e.head.as_deref()).unwrap_or("");
@@ -111,7 +133,9 @@ pub fn generate_html(page_data: &PageData, nav_groups: &[NavGroup], config: &Ssg
     let embed_footer_before = embed.and_then(|e| e.footer_before.as_deref()).unwrap_or("");
 
     // Footer HTML
-    let footer_html = if let Some(embed_footer) = embed.and_then(|e| e.footer.clone()) {
+    let footer_html = if !chrome.show_footer {
+        String::new()
+    } else if let Some(embed_footer) = embed.and_then(|e| e.footer.clone()) {
         embed_footer
     } else if let Some(t) = theme {
         generate_footer_html(t)
@@ -149,6 +173,10 @@ pub fn generate_html(page_data: &PageData, nav_groups: &[NavGroup], config: &Ssg
     if config.reader_chrome.needs_js() {
         all_js.push('\n');
         all_js.push_str(READER_CHROME_JS);
+    }
+    if header_chrome_needs_js(&header_nav_html, &announcement_html) {
+        all_js.push('\n');
+        all_js.push_str(HEADER_CHROME_JS);
     }
 
     // Social links
@@ -196,6 +224,7 @@ pub fn generate_html(page_data: &PageData, nav_groups: &[NavGroup], config: &Ssg
     {
         body_classes.push("entry-page--subtle".to_string());
     }
+    push_header_chrome_body_classes(&mut body_classes, &announcement_html, chrome);
     let body_class = body_classes.join(" ");
 
     let document_title = if page_data.title.trim() == config.site_name.trim() {
@@ -218,6 +247,9 @@ pub fn generate_html(page_data: &PageData, nav_groups: &[NavGroup], config: &Ssg
         body_class: &body_class,
         skip_link: skip_link.as_deref(),
         embed_header_before,
+        announcement_html: &announcement_html,
+        show_navbar: chrome.show_navbar,
+        header_nav_html: &header_nav_html,
         embed_header_after,
         base: &config.base,
         logo_src: &logo_src,
@@ -248,72 +280,4 @@ pub fn generate_html(page_data: &PageData, nav_groups: &[NavGroup], config: &Ssg
     };
 
     template.render().unwrap_or_default()
-}
-
-/// Everything the bare template can put around a rendered page body.
-///
-/// Bare mode leaves the shell to the consumer, but the metadata below is
-/// already computed for the themed page and is not something a consumer can
-/// recover afterwards — the generated OG image in particular is only
-/// discoverable by guessing at the output directory. Every field is optional,
-/// and a `BarePageData` carrying none of them renders exactly the document
-/// bare mode emitted before: no `<meta>` beyond charset and viewport, which
-/// keeps the no-JS size baseline honest.
-#[derive(Default)]
-pub struct BarePageData<'a> {
-    /// Page title, used for `<title>` and the OG/Twitter title.
-    pub title: &'a str,
-    /// Rendered page body.
-    pub content: &'a str,
-    /// `lang` attribute. Defaults to `en` when empty.
-    pub lang: &'a str,
-    /// `dir` attribute. Omitted entirely when empty.
-    pub dir: &'a str,
-    /// Page description, used for `description` and the OG/Twitter variants.
-    pub description: Option<&'a str>,
-    /// Absolute page URL, used for `<link rel="canonical">` and `og:url`.
-    pub canonical_url: Option<&'a str>,
-    /// Site name for `og:site_name`.
-    pub site_name: Option<&'a str>,
-    /// Image URL for `og:image` and `twitter:image`.
-    pub og_image: Option<&'a str>,
-    /// Raw markup appended to `<head>`.
-    pub head: &'a str,
-    /// Raw markup inserted directly after `<body>`.
-    pub body_start: &'a str,
-    /// Raw markup inserted directly before `</body>`.
-    pub body_end: &'a str,
-}
-
-/// Generates a bare HTML page for SSG.
-///
-/// This page intentionally omits navigation, styles, and scripts.
-pub fn generate_bare_html(content: &str, title: &str) -> String {
-    generate_bare_page(&BarePageData { title, content, ..BarePageData::default() })
-}
-
-/// Generates a bare HTML page with whatever head metadata and injected markup
-/// the caller has.
-pub fn generate_bare_page(data: &BarePageData<'_>) -> String {
-    let has_metadata = data.description.is_some()
-        || data.canonical_url.is_some()
-        || data.site_name.is_some()
-        || data.og_image.is_some();
-
-    BarePageTemplate {
-        lang: if data.lang.is_empty() { "en" } else { data.lang },
-        dir: data.dir,
-        title: data.title,
-        content: data.content,
-        has_metadata,
-        description: data.description,
-        canonical_url: data.canonical_url,
-        site_name: data.site_name,
-        og_image: data.og_image,
-        head: data.head,
-        body_start: data.body_start,
-        body_end: data.body_end,
-    }
-    .render()
-    .unwrap_or_default()
 }
