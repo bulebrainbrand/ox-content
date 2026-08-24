@@ -77,6 +77,8 @@ export type {
   ExtractedDocs,
   SsgOptions,
   ResolvedSsgOptions,
+  ReaderChromeOptions,
+  ResolvedReaderChrome,
   SiteMapsOptions,
   ResolvedSiteMapsOptions,
   SearchOptions,
