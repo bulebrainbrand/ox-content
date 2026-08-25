@@ -36,10 +36,13 @@ The Vite plugin gives you the full Ox Content pipeline: Markdown transforms, sta
 It already brings in the native runtime it needs, so you do not need to install `@ox-content/napi` separately for the Vite-based path.
 Common Markdown behavior is enabled by default, while non-standard authoring features such as emoji shortcodes, code annotations, package-manager tabs, and social embeds are opt-in. See [Built-in Features](./built-in-features.md) when choosing those options.
 
+3.0 is currently an alpha. npm `latest` is still 2.90.0, so install from the
+`alpha` dist-tag. Other `@ox-content/*` packages on this line use `@alpha` too.
+
 ### Install
 
 ```bash
-vp install @ox-content/vite-plugin
+vp install @ox-content/vite-plugin@alpha
 ```
 
 ### Minimal Setup
@@ -88,16 +91,16 @@ If you want component islands inside Markdown, add one of the first-party integr
 
 ```bash
 # Vue
-vp install @ox-content/vite-plugin-vue vue @vitejs/plugin-vue
+vp install @ox-content/vite-plugin-vue@alpha vue @vitejs/plugin-vue
 
 # React
-vp install @ox-content/vite-plugin-react react react-dom @vitejs/plugin-react
+vp install @ox-content/vite-plugin-react@alpha react react-dom @vitejs/plugin-react
 
 # Svelte
-vp install @ox-content/vite-plugin-svelte svelte @sveltejs/vite-plugin-svelte
+vp install @ox-content/vite-plugin-svelte@alpha svelte @sveltejs/vite-plugin-svelte
 
 # Solid
-vp install @ox-content/vite-plugin-solid solid-js vite-plugin-solid
+vp install @ox-content/vite-plugin-solid@alpha solid-js vite-plugin-solid
 ```
 
 Read more:
@@ -118,7 +121,7 @@ If you want Ox Content as a fast Markdown engine inside a Node.js tool, script, 
 ### Install
 
 ```bash
-vp install @ox-content/napi
+vp install @ox-content/napi@alpha
 ```
 
 ### Parse and Render

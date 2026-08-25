@@ -38,10 +38,12 @@ Rust からパーサとレンダラを直接使うなら crate です。
 
 Vite プラグインは Markdown 変換、SSG、テーマ、検索、OG 画像、API ドキュメント生成まで一通り提供します。ネイティブランタイムは同梱されるので、Vite 経路では `@ox-content/napi` を別途入れる必要はありません。よく使う Markdown は既定で有効、絵文字ショートコードや注釈、埋め込みなど非標準の機能はオプトインです。選択肢は [組み込み機能](./built-in-features.md) を見てください。
 
+3.0 はいま alpha です。npm の `latest` は 2.90.0 のままなので、`alpha` タグから入れてください。この系統の他の `@ox-content/*` も `@alpha` です。
+
 ### インストール
 
 ```bash
-vp install @ox-content/vite-plugin
+vp install @ox-content/vite-plugin@alpha
 ```
 
 ### 最小設定

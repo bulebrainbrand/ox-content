@@ -1,5 +1,5 @@
 #!/usr/bin/env -S node --experimental-strip-types
-// Usage: bun scripts/release.ts [patch|minor|major|x.y.z]
+// Usage: bun scripts/release.ts [patch|minor|major|alpha|beta|x.y.z] [--prepare-only]
 
 import { execSync } from "child_process";
 import * as fs from "fs";
@@ -245,10 +245,13 @@ function updateChangelogFile(content: string): void {
 
 async function main(): Promise<void> {
   const args = process.argv.slice(2);
-  const input = args[0];
+  const prepareOnly = args.includes("--prepare-only");
+  const input = args.find((arg) => arg !== "--prepare-only");
 
   if (!input) {
-    console.error("Usage: bun scripts/release.ts [patch|minor|major|x.y.z]");
+    console.error(
+      "Usage: bun scripts/release.ts [patch|minor|major|alpha|beta|x.y.z] [--prepare-only]",
+    );
     process.exit(1);
   }
 
@@ -302,6 +305,12 @@ async function main(): Promise<void> {
   const categorized = categorizeCommits(commits);
   const changelogContent = generateChangelog(newVersion, categorized);
   updateChangelogFile(changelogContent);
+
+  if (prepareOnly) {
+    console.log(`\nPrepared v${newVersion} without commit, tag, or push.`);
+    console.log("Bootstrap any first-time npm packages, then commit and tag.");
+    return;
+  }
 
   console.log("\nCreating git commit and tag...");
   exec("git add -A");

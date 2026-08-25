@@ -16,9 +16,18 @@ git status --short
 vp run release -- patch
 ```
 
+For a first-time npm package, stop before the tag so you can bootstrap it:
+
+```bash
+vp run release -- 3.0.0-alpha.1 --prepare-only
+node scripts/bootstrap-npm-package.mjs npm/ox-content-code-play
+```
+
 The release script updates package versions, Cargo workspace versions, docs
 snippets, and the changelog. It then creates a conventional release commit and
 an annotated `v*` tag. Pushing the tag starts `.github/workflows/publish.yml`.
+Prerelease tags (`v3.0.0-alpha.1`) publish to the matching npm dist-tag
+(`alpha`) and create a GitHub prerelease so they do not replace `latest`.
 
 The publish workflow handles:
 
@@ -82,14 +91,21 @@ A release that introduces a new npm package therefore needs one manual publish
 by a maintainer with local npm credentials, before the tag is pushed:
 
 ```bash
-# Generic new package
-corepack pnpm --filter @ox-content/vite-plugin-new build
-cd npm/vite-plugin-ox-content-new
-corepack pnpm pack --pack-destination /tmp
-npm publish /tmp/ox-content-vite-plugin-new-<version>.tgz --access public --provenance=false
-
-# @ox-content/code-play bootstrap (package does not exist on npm yet)
+# Generic new package, or @ox-content/code-play
 node scripts/bootstrap-npm-package.mjs npm/ox-content-code-play
+```
+
+The script packs the workspace package, publishes it from the laptop
+(`--provenance=false`, dist-tag from the version: `alpha` for
+`3.0.0-alpha.1`), then registers the GitHub Actions trusted publisher:
+
+```bash
+npm trust github @ox-content/code-play \
+  --file publish.yml \
+  --repo ubugeeei-prod/ox-content \
+  --env npm \
+  --allow-publish \
+  -y
 ```
 
 Bump every workspace package to the release version before packing, or the
@@ -98,9 +114,10 @@ tarball will pin its `@ox-content/*` dependencies to the previous one.
 package's `publishConfig` turns it on, and subsequent versions get it from the
 workflow.
 
-Then add the trusted publisher entry on npmjs.com and push the tag. The publish
-steps skip versions that already exist, so the bootstrap publish is not
-republished.
+`npm trust` requires npm 11.15+, account 2FA, and a package that already
+exists. The first trust call prompts for 2FA; later ones in the same five
+minutes can skip it. The publish steps skip versions that already exist, so
+the bootstrap publish is not republished.
 
 ## First-Time Crate Publishing
 

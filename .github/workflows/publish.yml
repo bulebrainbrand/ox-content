@@ -579,4 +579,8 @@ jobs:
             echo "Release $GH_REF_NAME already exists; skipping."
             exit 0
           fi
-          gh release create "$GH_REF_NAME" --generate-notes
+          if [[ "$GH_REF_NAME" == *-* ]]; then
+            gh release create "$GH_REF_NAME" --generate-notes --prerelease
+          else
+            gh release create "$GH_REF_NAME" --generate-notes
+          fi

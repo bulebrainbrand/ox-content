@@ -197,8 +197,8 @@ dev ミドルウェアが不要なら `proxy: false` にしてください。
 ## 初回公開
 
 `@ox-content/code-play` は npm では新しいです。Trusted publishing はパッケージを
-作れないので、メンテナーがノート PC から **一度** 公開し、そのあと trusted publisher を足します。
-コマンドと npmjs.com の正確な欄は
+作れないので、メンテナーがノート PC から **一度** 公開し、そのあと
+`npm trust` で trusted publisher を登録します。コマンドは
 [リリース作業](/release.md#first-time-npm-publishing) にあります。
 
 後続 PR は [Code Play ロードマップ](/code-play-roadmap.md) を見てください。

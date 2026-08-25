@@ -16,7 +16,7 @@ off unless you opt in.
 
 ## Install
 
-<pm>npm install @ox-content/code-play</pm>
+<pm>npm install @ox-content/code-play@alpha</pm>
 
 ```ts
 import { oxContent } from "@ox-content/vite-plugin";
@@ -202,8 +202,8 @@ ship. Do not mark visitor-supplied or unreviewed snippets as `play`.
 ## First publish
 
 `@ox-content/code-play` is new on npm. Trusted publishing cannot create the
-package, so a maintainer publishes **once** from a laptop, then adds the
-trusted publisher. Commands and the exact npmjs.com fields live in
+package, so a maintainer publishes **once** from a laptop, then registers the
+trusted publisher with `npm trust`. Commands live in
 [Release Operations](../release.md#first-time-npm-publishing).
 
 See the [Code Play roadmap](../code-play-roadmap.md) for follow-up PRs.
