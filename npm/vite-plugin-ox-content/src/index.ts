@@ -18,6 +18,7 @@ import { resolveCascadeOptions, resolvePermalinksOptions } from "./permalinks";
 import { resolveRedirectsOptions } from "./redirects";
 import { notFoundSearchExcludeIds } from "./not-found";
 import { resolveFeedsOptions } from "./feeds";
+import { resolveBlogOptions } from "./blog";
 import { resolvePwaOptions } from "./pwa";
 import { resolveTaxonomiesOptions } from "./taxonomies";
 import { resolveVersionsOptions } from "./versions";
@@ -125,6 +126,9 @@ export type {
   ResolvedCascadeOptions,
   RedirectsOptions,
   ResolvedRedirectsOptions,
+  BlogAuthor,
+  BlogOptions,
+  ResolvedBlogOptions,
   FeedFormat,
   FeedsOptions,
   ResolvedFeedsOptions,
@@ -635,6 +639,10 @@ function resolveOptions(options: OxContentOptions): ResolvedOptions {
     permalinks: resolvePermalinksOptions(options.permalinks),
     cascade: resolveCascadeOptions(options.cascade),
     redirects: resolveRedirectsOptions(options.redirects),
+    blog: resolveBlogOptions(
+      options.blog ??
+        (typeof options.ssg === "object" && options.ssg ? options.ssg.blog : undefined),
+    ),
     feeds: resolveFeedsOptions(options.feeds),
     pwa: resolvePwaOptions(options.pwa),
     taxonomies: resolveTaxonomiesOptions(options.taxonomies),
@@ -1067,6 +1075,7 @@ export {
 export { resolvePermalinksOptions, resolveCascadeOptions } from "./permalinks";
 export { resolveRedirectsOptions } from "./redirects";
 export { resolveFeedsOptions } from "./feeds";
+export { resolveBlogOptions, resolveBlogCollectionName, readingTimeMinutes } from "./blog";
 export { resolvePwaOptions } from "./pwa";
 export { resolveTaxonomiesOptions } from "./taxonomies";
 export { resolveVersionsOptions } from "./versions";

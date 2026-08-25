@@ -78,6 +78,7 @@ export default defineConfig({
 | `a11y`            | `false`        | Skip link and print styles.                                                                           |
 | `notFound`        | `false`        | Themed 404 page. See [Custom 404](./not-found.md).                                                    |
 | `team`            | `false`        | Member cards on `layout: team`. See [Team](./team.md).                                                |
+| `blog`            | `false`        | Paginated index, authors, tags, archive. See [Blog](./blog.md).                                       |
 | `sectionIndex`    | `false`        | Generated listings for directories without `index.md`. See [Section index pages](./section-index.md). |
 | `pageChrome`      | `false`        | Honor per-page frontmatter chrome flags.                                                              |
 | `theme`           | `defaultTheme` | Theme configuration via `defineTheme()`.                                                              |
@@ -312,6 +313,7 @@ array order.
 - [Header chrome](./header-chrome.md) — opt-in header nav, announcement, and page flags.
 - [Sitemap / robots / llms.txt](./site-maps.md) — opt-in crawl manifests.
 - [Redirects and aliases](./redirects.md) — opt-in static HTML redirects.
+- [Blog](./blog.md) — opt-in paginated index, authors, tags, and archive.
 - [RSS / Atom / JSON feeds](./feeds.md) — opt-in collection feeds.
 - [PWA manifest and service worker](./pwa.md) — opt-in manifest and conservative offline cache (adds client JS).
 - [Theming](../theming.md) — the theme system used by SSG.
