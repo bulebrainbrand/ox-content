@@ -1,6 +1,6 @@
 use super::super::{
-    A11y, JsonLd, LocaleInfo, LocalePath, NavGroup, NavItem, PageChromeFlags, PageData,
-    ReaderChrome, SsgConfig, generate_bare_html, generate_html,
+    A11y, HeadValidation, JsonLd, LocaleInfo, LocalePath, NavGroup, NavItem, PageChromeFlags,
+    PageData, ReaderChrome, SsgConfig, generate_bare_html, generate_html,
 };
 
 fn page(path: &str) -> PageData {
@@ -17,6 +17,8 @@ fn page(path: &str) -> PageData {
         next: None,
         breadcrumbs: None,
         chrome: PageChromeFlags::default(),
+        robots: None,
+        canonical: None,
     }
 }
 
@@ -74,6 +76,8 @@ fn config(
         a11y: A11y::default(),
         page_chrome: false,
         json_ld: JsonLd::default(),
+        site_url: None,
+        head_validation: HeadValidation::Off,
     }
 }
 

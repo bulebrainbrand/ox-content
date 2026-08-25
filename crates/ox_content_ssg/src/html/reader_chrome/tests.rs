@@ -1,6 +1,6 @@
 use super::super::{
-    EntryPageConfig, NavGroup, NavItem, PageChromeFlags, PageData, ReaderChrome, SsgConfig,
-    generate_bare_html, generate_html,
+    EntryPageConfig, HeadValidation, NavGroup, NavItem, PageChromeFlags, PageData, ReaderChrome,
+    SsgConfig, generate_bare_html, generate_html,
 };
 use super::{READER_CHROME_CSS, READER_CHROME_JS, apply_reader_chrome};
 
@@ -18,6 +18,8 @@ fn page(content: &str) -> PageData {
         next: None,
         breadcrumbs: None,
         chrome: PageChromeFlags::default(),
+        robots: None,
+        canonical: None,
     }
 }
 
@@ -38,6 +40,8 @@ fn config(reader_chrome: ReaderChrome) -> SsgConfig {
         a11y: crate::A11y::default(),
         page_chrome: false,
         json_ld: crate::JsonLd::default(),
+        site_url: None,
+        head_validation: HeadValidation::Off,
     }
 }
 

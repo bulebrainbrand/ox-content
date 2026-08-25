@@ -1,6 +1,6 @@
 use super::{SectionIndexItem, SectionIndexStyle, is_safe_section_href, render_section_index};
 use crate::html::{
-    NavGroup, NavItem, PageData, ReaderChrome, SsgConfig, generate_html,
+    HeadValidation, NavGroup, NavItem, PageData, ReaderChrome, SsgConfig, generate_html,
     section_index::SECTION_INDEX_CSS,
 };
 
@@ -26,6 +26,8 @@ fn page(content: &str) -> PageData {
         next: None,
         breadcrumbs: None,
         chrome: crate::PageChromeFlags::default(),
+        robots: None,
+        canonical: None,
     }
 }
 
@@ -46,6 +48,8 @@ fn config() -> SsgConfig {
         a11y: crate::A11y::default(),
         page_chrome: false,
         json_ld: crate::JsonLd::default(),
+        site_url: None,
+        head_validation: HeadValidation::Off,
     }
 }
 

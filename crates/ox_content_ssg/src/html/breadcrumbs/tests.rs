@@ -1,6 +1,6 @@
 use super::super::{
-    A11y, EntryPageConfig, JsonLd, NavGroup, NavItem, PageChromeFlags, PageData, ReaderChrome,
-    SSG_CSS, SsgConfig, ThemeConfig, generate_bare_html, generate_html,
+    A11y, EntryPageConfig, HeadValidation, JsonLd, NavGroup, NavItem, PageChromeFlags, PageData,
+    ReaderChrome, SSG_CSS, SsgConfig, ThemeConfig, generate_bare_html, generate_html,
 };
 
 fn nav_item(title: &str, path: &str, href: &str) -> NavItem {
@@ -57,6 +57,8 @@ fn page(path: &str) -> PageData {
         next: None,
         breadcrumbs: None,
         chrome: PageChromeFlags::default(),
+        robots: None,
+        canonical: None,
     }
 }
 
@@ -77,6 +79,8 @@ fn config(breadcrumbs: bool) -> SsgConfig {
         a11y: A11y::default(),
         page_chrome: false,
         json_ld: JsonLd::default(),
+        site_url: None,
+        head_validation: HeadValidation::Off,
     }
 }
 
