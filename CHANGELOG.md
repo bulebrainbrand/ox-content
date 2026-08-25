@@ -1,5 +1,20 @@
 # Changelog
 
+## [3.0.0-alpha.9] - 2026-08-25
+
+### Features
+
+- add typo-tolerant local matching (#868)
+
+### Bug Fixes
+
+- soften code copy button (#920)
+- avoid empty table stretch columns (#919)
+- restore typed hover overlays (#918)
+- contain mobile menu scrolling (#915)
+- highlight WebContainer examples as MDX (#914)
+- keep browser cancellation responsive (#870)
+
 ## [3.0.0-alpha.8] - 2026-08-25
 
 ### Bug Fixes
