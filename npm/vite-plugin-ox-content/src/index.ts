@@ -42,6 +42,7 @@ import { generateCollectionsVirtualModule, resolveCollectionsOptions } from "./c
 import type { BuiltinPmOptions, OxContentOptions, ResolvedOptions } from "./types";
 import { resolveCardOptions } from "./card-options";
 import { resolveFileTreeOptions } from "./file-tree-options";
+import { resolveTypedHoverOptions } from "./typed-hover";
 import { resolveIncludeOptions } from "./include-options";
 import { resolveStepsOptions } from "./step-options";
 import type { TwitterEmbedOptions } from "./plugins";
@@ -85,6 +86,8 @@ export type {
   ResolvedCodeBlockLintOptions,
   CodeBlockTypecheckOptions,
   ResolvedCodeBlockTypecheckOptions,
+  TypedHoverOptions,
+  ResolvedTypedHoverOptions,
   DocsTestOptions,
   ResolvedDocsTestOptions,
   MarkdownDisplayFormat,
@@ -652,6 +655,7 @@ function resolveOptions(options: OxContentOptions): ResolvedOptions {
     cjkEmphasis: options.cjkEmphasis ?? false,
     codeBlockLint: resolveCodeBlockLintOptions(options.codeBlockLint),
     codeBlockTypecheck: resolveCodeBlockTypecheckOptions(options.codeBlockTypecheck),
+    typedHover: resolveTypedHoverOptions(options.typedHover),
     docsTests: resolveDocsTestOptions(options.docsTests),
     mermaid: options.mermaid ?? false,
     math: resolveMathOptions(options.math),
@@ -777,6 +781,7 @@ export { resolveCardOptions } from "./card-options";
 export { resolveIncludeOptions } from "./include-options";
 export { resolveStepsOptions } from "./step-options";
 export { resolveFileTreeOptions } from "./file-tree-options";
+export { resolveTypedHoverOptions } from "./typed-hover";
 
 function resolveSanitizeOptions(
   options: OxContentOptions["sanitize"],
