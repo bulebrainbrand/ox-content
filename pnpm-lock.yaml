@@ -2284,7 +2284,7 @@ importers:
         specifier: 'catalog:'
         version: 26.2.0
       '@types/vscode':
-        specifier: ^1.134.0
+        specifier: ^1.125.0
         version: 1.134.0
       '@vscode/test-cli':
         specifier: ^0.0.15
