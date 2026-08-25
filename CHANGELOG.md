@@ -1,5 +1,11 @@
 # Changelog
 
+## [3.0.0-alpha.8] - 2026-08-25
+
+### Bug Fixes
+
+- skip prerelease marketplace publish (#865)
+
 ## [3.0.0-alpha.7] - 2026-08-25
 
 ### Performance
