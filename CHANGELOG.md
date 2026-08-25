@@ -1,5 +1,23 @@
 # Changelog
 
+## [3.0.0-alpha.4] - 2026-08-25
+
+### Features
+
+- add native TOML and WGSL grammars (#817)
+
+### Bug Fixes
+
+- keep tsgo external and find payloads after wrap (#815)
+- typeset multiline display math blocks (#816)
+- keep successful Rust runs on the stdio tab (#813)
+- keep Code Play Run clear of the copy control (#814)
+- decode numeric HTML entities in play fences (#812)
+
+### Refactoring
+
+- drop leftover shiki names from highlight markup (#818)
+
 ## [3.0.0-alpha.3] - 2026-08-25
 
 ### Bug Fixes
