@@ -88,12 +88,14 @@
     "@types/react": "catalog:",
     "@types/react-dom": "catalog:",
     "@typescript/native-preview": "catalog:",
+    "katex": "^0.16.22",
     "vite": "catalog:",
     "vite-plus": "catalog:",
     "yaml": "^2.9.0"
   },
   "peerDependencies": {
     "@vue/compiler-sfc": "^3.4.0",
+    "katex": "^0.16.0",
     "react": "^19.0.0",
     "react-dom": "^19.0.0",
     "svelte": "^5.0.0",
@@ -101,6 +103,9 @@
     "vue": "^3.4.0"
   },
   "peerDependenciesMeta": {
+    "katex": {
+      "optional": true
+    },
     "vue": {
       "optional": true
     },
