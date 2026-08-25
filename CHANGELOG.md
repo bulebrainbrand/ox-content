@@ -1,5 +1,12 @@
 # Changelog
 
+## [3.0.0-alpha.3] - 2026-08-25
+
+### Bug Fixes
+
+- make vpr release alpha work under Node (#811)
+- handle optional and rest tuple types (#810)
+
 ## [3.0.0-alpha.2] - 2026-08-25
 
 ### Features
