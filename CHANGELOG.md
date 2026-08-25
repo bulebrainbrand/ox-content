@@ -1,5 +1,34 @@
 # Changelog
 
+## [3.0.0-alpha.6] - 2026-08-25
+
+### Features
+
+- render semantic ordered footnotes (#824) (#850)
+- add configurable rich magic links (#825) (#848)
+- publish Markdown source companion files (#826) (#849)
+- add visible heading permalinks (#829) (#847)
+- aggregate external feeds into the blog index (#827) (#846)
+- persist Open Graph metadata across builds (#823) (#844)
+- include Git lastmod timestamps in sitemap.xml (#843)
+- honor YouTube start times (#822) (#842)
+- filter the dialog by language and version (#838)
+- add a full-fidelity static card with sveltweet visual parity (#833) (#839)
+- render quoted posts and reply metadata (#835)
+- render video and animated GIF media (#832) (#836)
+
+### Bug Fixes
+
+- hide SIMD nibble tables on non-vector targets (#830)
+
+### Performance
+
+- deduplicate identical page resources by content (#828) (#845)
+
+### Documentation
+
+- add react-tweet and sveltweet license notices (#840) (#841)
+
 ## [3.0.0-alpha.5] - 2026-08-25
 
 ### Features
