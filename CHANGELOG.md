@@ -1,5 +1,11 @@
 # Changelog
 
+## [3.0.0-alpha.5] - 2026-08-25
+
+### Features
+
+- add build-time page-head API and built-in SEO (#821)
+
 ## [3.0.0-alpha.4] - 2026-08-25
 
 ### Features
