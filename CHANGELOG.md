@@ -1,5 +1,11 @@
 # Changelog
 
+## [3.0.0-alpha.7] - 2026-08-25
+
+### Performance
+
+- report build and rendered output benchmarks (#862)
+
 ## [3.0.0-alpha.6] - 2026-08-25
 
 ### Features
