@@ -1,5 +1,96 @@
 # Changelog
 
+## [3.0.0-alpha.1] - 2026-08-25
+
+### Upgrade Notes
+
+- First 3.0 alpha. npm packages publish to the `alpha` dist-tag; `latest` stays on 2.90.0. Install with `@ox-content/vite-plugin@alpha`.
+- Shiki is gone. `highlightTheme` and `highlightLangs` are removed. `highlight: true` uses tree-sitter only; languages without a grammar stay plain.
+- Built-ins, MDX, versioning, and Code Play stay opt-in.
+- `@ox-content/code-play` is published for the first time.
+- APIs may still change before 3.0.0.
+
+### Features
+
+- enable MDX for .mdx source files (#788)
+- expose MDX through bindings and mdast (#787)
+- localize sidebar navigation labels (#784)
+- add opt-in docs versioning, v2.90 snapshot, and Japanese guides (#754)
+- add opt-in taxonomies and related pages (#753)
+- add opt-in hosted search provider adapter (#752)
+- add opt-in header nav, announcement bar, and page chrome (#750)
+- add opt-in team members page (#749)
+- add opt-in skip link and print styles (#748)
+- add opt-in locale switcher (#746)
+- add opt-in breadcrumbs (#747)
+- render markdown children inside JSX islands (#745)
+- add opt-in RSS, Atom, and JSON feeds (#734)
+- add opt-in custom 404 page (#733)
+- add opt-in redirects, aliases, and path rewrites (#732)
+- add opt-in permalinks and frontmatter cascade (#743)
+- add opt-in file tree blocks (#724)
+- serialize XSS-safe island props from JSX attributes (#744)
+- add opt-in `$` / `$$` math (#717)
+- add opt-in draft, unlisted, and scheduled pages (#739)
+- add opt-in card and link-card blocks (#726)
+- parse document-level flow and text expressions (#741)
+- parse JSX fragments, spreads, and member names (#736)
+- add opt-in step lists (#727)
+- parse import and export as MdxjsEsm (#729)
+- add opt-in copy, external-link, and back-to-top chrome (#725)
+- add opt-in figures and lazy images (#720)
+- add opt-in sitemap, robots.txt, and llms.txt (#723)
+- parse JSX elements when mdx is enabled (#722)
+- add opt-in inline badges (#719)
+- add opt-in Markdown file includes (#718)
+- make the right-hand page outline opt-in (#715)
+- add opt-in ::: tip custom containers (#707)
+- add opt-in previous/next page links (#713)
+- add AST nodes and parser option (#686)
+- hide dead SSG Typecheck and expose Cancel (#712)
+- drop Shiki and highlight with tree-sitter only (#710)
+- prove SSG hydrate+Run in CI and add session.cancel() (#648) (#711)
+- run browser JavaScript in a sandboxed iframe (#705)
+- emit a self-contained auto-hydrating browser client (#703)
+- harden playground proxies and document endpoints (#663)
+- dedicated stderr viewer and stdout/stderr API (#662)
+- add opt-in plugin for on-demand sample execution (#649)
+
+### Bug Fixes
+
+- preserve documentation version in sidebar navigation (#785)
+- stabilize MPA navigation (#783)
+- enforce generated link integrity (#782)
+- keep default surfaces flat (#781)
+- make code copy an interaction icon (#780)
+- compact mobile breadcrumb spacing (#779)
+- harden mobile menu interactions (#777)
+- restore mobile content gutters (#776)
+- eliminate doubled table borders (#773)
+- keep copy control clear of code (#772)
+- align nested sidebar hierarchy (#771)
+- keep locale nav current and theme header selects (#758)
+- split header-chrome tests under the file line limit (#757)
+- skip landing-page chrome and honor announcement dismiss (#756)
+- regenerate stale API reference pages (#755)
+- split locale-switcher Vite tests under the file line limit (#751)
+- keep generated declarations in NAPI sort order (#728)
+- keep steps preamble and refresh NAPI declarations (#737)
+- keep CI NAPI JSDoc newline encoding in API examples (#721)
+- build Code Play before Void docs deploy (#716)
+
+### Performance
+
+- skip GFM autolink rewrite when a block has no bare URL (#643)
+- gate default autolinks with a reused :// finder (#642)
+- scan pre-pass newlines with 32-byte NEON (#641)
+
+### Documentation
+
+- fold remaining security notes onto main (#648) (#704)
+- add Ox Content 3.0 and docs-site feature roadmaps (#708)
+- expand the guide and add a standalone example (#697)
+
 ## [2.90.0] - 2026-08-23
 
 ### Features
