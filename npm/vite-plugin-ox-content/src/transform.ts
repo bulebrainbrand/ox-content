@@ -35,8 +35,7 @@
  */
 
 import type { MdxImport, ResolvedOptions, TocEntry, TransformResult } from "./types";
-import { highlightCode } from "./highlight";
-import { highlightDocumentNatively } from "./highlight-native";
+import { highlightPageHtml } from "./highlight";
 import { importNapiModule } from "./napi";
 import { transformMermaidStatic } from "./plugins/mermaid";
 import { renderKatexMath } from "./plugins/math";
@@ -45,6 +44,7 @@ import { protectMermaidSvgs, restoreMermaidSvgs } from "./plugins/mermaid-protec
 import { typecheckCodeBlocks } from "./code-blocks";
 import { applyTypedHover } from "./typed-hover";
 import { resolveMdxForFilePath } from "./markdown";
+import { toJsFileTreeOptions } from "./file-tree-options";
 
 /**
  * NAPI bindings for Rust-based Markdown processing.
@@ -307,6 +307,12 @@ interface JsTransformOptions {
 
   fileTree?: {
     enabled?: boolean;
+    defaultOpen?: boolean;
+    icons?: boolean;
+    iconFolder?: string;
+    iconFolderOpen?: string;
+    iconFile?: string;
+    iconFiles?: Record<string, string>;
   };
 
   sanitize?: JsSanitizeOptions;
@@ -598,7 +604,7 @@ export async function transformMarkdown(
       : undefined,
     cards: options.cards?.enabled ? { enabled: true } : undefined,
     steps: options.steps?.enabled ? { enabled: true } : undefined,
-    fileTree: options.fileTree?.enabled ? { enabled: true } : undefined,
+    fileTree: toJsFileTreeOptions(options.fileTree),
     // Sanitize once at the end of the JS pipeline so opt-in embeds can be
     // expanded before the allow-list is applied.
     sanitize: undefined,
@@ -641,15 +647,7 @@ export async function transformMarkdown(
     // `<pre><code>`. Only markup the pass cannot read — where a text scan and
     // a real HTML parser would disagree — falls back to a native-only
     // per-block walk.
-    const native = await highlightDocumentNatively(html);
-
-    if (native && native.skipped.length === 0) {
-      html = native.html;
-    } else {
-      const originalHtml = html;
-      const highlightedHtml = await highlightCode(html);
-      html = napi.mergeHighlightedCodeBlocks(originalHtml, highlightedHtml);
-    }
+    html = await highlightPageHtml(html, napi.mergeHighlightedCodeBlocks);
   }
 
   // Render static built-in embeds while Mermaid SVG placeholders are protected.
@@ -660,6 +658,12 @@ export async function transformMarkdown(
       openGraph: {},
     },
   );
+
+  // GitHub source cards are created after the first highlight pass, so run
+  // highlighting again when those blocks are present.
+  if (options.highlight && html.includes("ox-github-code-block")) {
+    html = await highlightPageHtml(html, napi.mergeHighlightedCodeBlocks);
+  }
 
   // Restore protected SVGs
   html = restoreMermaidSvgs(html, svgs);
