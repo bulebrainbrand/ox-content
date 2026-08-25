@@ -106,6 +106,8 @@ export type {
   ExtractedDocs,
   SsgOptions,
   ResolvedSsgOptions,
+  MarkdownSourceOptions,
+  ResolvedMarkdownSourceOptions,
   JsonLdOptions,
   JsonLdPublisherOptions,
   ResolvedJsonLd,
@@ -1115,6 +1117,7 @@ export type {
 } from "./page-head";
 export { resolveNotFoundOptions } from "./not-found";
 export { resolveSiteMapsOptions } from "./site-maps";
+export { resolveMarkdownSourceOptions } from "./markdown-source";
 export {
   classifyPublishState,
   resolvePublishStateOptions,
