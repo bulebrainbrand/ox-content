@@ -49,6 +49,7 @@ pub struct WasmParserOptions {
     autolink_urls: bool,
     autolink_patterns: Vec<String>,
     autolink_target_blank: bool,
+    semantic_footnotes: bool,
     heading_permalinks: bool,
 }
 
@@ -57,8 +58,8 @@ impl WasmParserOptions {
     /// Creates options with all Markdown extension flags disabled.
     ///
     /// Defaults: `gfm = false`, `mdx = false`, `tocMaxDepth = 3`, `autolinkUrls = true`,
-    /// `autolinkPatterns = ["http://", "https://"]`, and
-    /// `autolinkTargetBlank = true`.
+    /// `autolinkPatterns = ["http://", "https://"]`,
+    /// `autolinkTargetBlank = true`, and `semanticFootnotes = false`.
     #[wasm_bindgen(constructor)]
     pub fn new() -> Self {
         Self {
@@ -73,6 +74,7 @@ impl WasmParserOptions {
             autolink_urls: true,
             autolink_patterns: vec!["http://".to_string(), "https://".to_string()],
             autolink_target_blank: true,
+            semantic_footnotes: false,
             heading_permalinks: false,
         }
     }
@@ -168,6 +170,14 @@ impl WasmParserOptions {
         self.autolink_target_blank = value;
     }
 
+    /// Renders footnotes as a semantic ordered section with numeric markers.
+    ///
+    /// Default: `false`.
+    #[wasm_bindgen(setter = semanticFootnotes)]
+    pub fn set_semantic_footnotes(&mut self, value: bool) {
+        self.semantic_footnotes = value;
+    }
+
     /// Appends a visible heading permalink (`<a class="header-anchor" href="#id">`).
     ///
     /// Default: `false`.
@@ -236,6 +246,7 @@ pub fn parse_and_render(source: &str, options: Option<WasmParserOptions>) -> JsV
         autolink_urls: opts.autolink_urls,
         autolink_target_blank: opts.autolink_target_blank,
         autolink_patterns: opts.autolink_patterns,
+        semantic_footnotes: opts.semantic_footnotes,
         heading_permalinks: opts.heading_permalinks,
     };
 
@@ -268,6 +279,7 @@ pub fn transform(source: &str, options: Option<WasmParserOptions>) -> JsValue {
         autolink_urls: opts.autolink_urls,
         autolink_target_blank: opts.autolink_target_blank,
         autolink_patterns: opts.autolink_patterns,
+        semantic_footnotes: opts.semantic_footnotes,
         heading_permalinks: opts.heading_permalinks,
     };
 

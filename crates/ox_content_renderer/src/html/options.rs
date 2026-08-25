@@ -108,6 +108,16 @@ pub struct HtmlRendererOptions {
     /// Default: `true`.
     pub autolink_target_blank: bool,
 
+    /// Render footnotes as one ordered section with numeric display markers.
+    ///
+    /// Off by default so current alpha HTML stays stable. When on, source
+    /// identifiers are used only for lookup and slugs; visible markers are
+    /// 1, 2, … in document order, and definitions emit as
+    /// `<section class="footnotes"><ol><li>…`.
+    ///
+    /// Default: `false`.
+    pub semantic_footnotes: bool,
+
     /// Append a visible heading permalink after the heading children.
     ///
     /// Default: `false`. Off output is byte-identical to previous releases.
@@ -153,6 +163,7 @@ pub(super) struct RendererOptions {
     pub(super) autolink_urls: bool,
     autolink_patterns: Option<Vec<String>>,
     pub(super) autolink_target_blank: bool,
+    pub(super) semantic_footnotes: bool,
     pub(super) heading_permalinks: bool,
 }
 
@@ -174,6 +185,7 @@ impl RendererOptions {
             autolink_urls: true,
             autolink_patterns: None,
             autolink_target_blank: true,
+            semantic_footnotes: false,
             heading_permalinks: false,
         }
     }
@@ -220,6 +232,7 @@ impl From<HtmlRendererOptions> for RendererOptions {
             autolink_urls: options.autolink_urls,
             autolink_patterns: Some(options.autolink_patterns),
             autolink_target_blank: options.autolink_target_blank,
+            semantic_footnotes: options.semantic_footnotes,
             heading_permalinks: options.heading_permalinks,
         }
     }
@@ -262,6 +275,7 @@ impl HtmlRendererOptions {
             autolink_urls: true,
             autolink_patterns: DEFAULT_AUTOLINK_PATTERNS.iter().map(ToString::to_string).collect(),
             autolink_target_blank: true,
+            semantic_footnotes: false,
             heading_permalinks: false,
         }
     }
