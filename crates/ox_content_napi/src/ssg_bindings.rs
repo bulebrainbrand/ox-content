@@ -1,6 +1,3 @@
-use std::path::PathBuf;
-use std::process::Command;
-
 use napi_derive::napi;
 
 use crate::{
@@ -10,6 +7,8 @@ use crate::{
 };
 
 mod converters;
+mod git;
+pub use git::*;
 mod section_index;
 pub use section_index::*;
 
@@ -18,28 +17,6 @@ use converters::{
     convert_navigation_group, convert_pager_override, convert_sidebar_item, convert_theme_config,
     flatten_toc_entries, map_generated_html_page, map_nav_group, map_route_paths, map_shared_asset,
 };
-
-/// Returns the last git commit timestamp for a file in milliseconds.
-#[napi]
-pub fn get_git_last_updated(file_path: String, root: Option<String>) -> Option<f64> {
-    let root = root.map(PathBuf::from)?;
-    let file = PathBuf::from(&file_path);
-    let pathspec = file.strip_prefix(&root).ok().and_then(|p| p.to_str()).unwrap_or(&file_path);
-    let output = Command::new("git")
-        .arg("-C")
-        .arg(root)
-        .args(["log", "-1", "--format=%ct", "--"])
-        .arg(pathspec)
-        .output()
-        .ok()?;
-
-    if !output.status.success() {
-        return None;
-    }
-
-    let seconds = String::from_utf8(output.stdout).ok()?.trim().parse::<f64>().ok()?;
-    Some(seconds * 1_000.0)
-}
 
 /// Resolves all output and public route paths for an SSG page.
 #[napi(js_name = "resolveSsgRoutePaths")]
@@ -187,6 +164,15 @@ pub fn generate_ssg_html(
             .last_updated
             .filter(|timestamp| timestamp.is_finite() && *timestamp >= 0.0)
             .map(|timestamp| timestamp as i64),
+        contributors: page_data
+            .contributors
+            .unwrap_or_default()
+            .into_iter()
+            .map(|contributor| ox_content_ssg::Contributor {
+                name: contributor.name,
+                avatar: contributor.avatar,
+            })
+            .collect(),
         path: page_data.path,
         entry_page: convert_entry_page_config(page_data.entry_page),
         prev: convert_pager_override(page_data.prev),

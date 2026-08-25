@@ -61,6 +61,7 @@ fn javascript_wrapper_and_declarations_cover_expected_exports() {
         "nativeHighlightLanguages",
         "supportsHighlightLanguage",
         "generateSsgHtml",
+        "getGitContributors",
         "getGitLastUpdated",
         "getSearchDocumentScopes",
         "getSsgHref",

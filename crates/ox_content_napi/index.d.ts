@@ -198,6 +198,9 @@ export declare function generateSsgBarePage(page: JsSsgBarePage): string
 /** Generates SSG HTML page with navigation and search. */
 export declare function generateSsgHtml(pageData: JsSsgPageData, navGroups: Array<JsSsgNavGroup>, config: JsSsgConfig): string
 
+/** Returns unique git authors for a file. Empty when git is missing or fails. */
+export declare function getGitContributors(filePath: string, root?: string | undefined | null): Array<JsGitContributor>
+
 /** Returns the last git commit timestamp for a file in milliseconds. */
 export declare function getGitLastUpdated(filePath: string, root?: string | undefined | null): number | null
 
@@ -879,6 +882,16 @@ export interface JsFrameworkComponentIsland {
   props: Record<string, any>
   id: string
   content?: string
+}
+
+/** One unique git author returned by `getGitContributors`. */
+export interface JsGitContributor {
+  /** Author name from `%an`. */
+  name: string
+  /** Author email from `%ae`. Never rendered into `href`. */
+  email?: string
+  /** Number of commits attributed to this author on the file. */
+  commits?: number
 }
 
 /** Export graph resolution options. */
@@ -1601,6 +1614,14 @@ export interface JsSsgConfig {
   jsonLd?: JsJsonLd
 }
 
+/** One rendered git author on an SSG page. */
+export interface JsSsgContributor {
+  /** Display name. Escaped in HTML. */
+  name: string
+  /** Optional `https:` avatar URL. Emails are never accepted here. */
+  avatar?: string
+}
+
 /** Result of SSG shared asset extraction. */
 export interface JsSsgExternalizedAssets {
   /** HTML pages with inline assets replaced. */
@@ -1667,6 +1688,8 @@ export interface JsSsgPageData {
   toc: Array<TocEntry>
   /** Last updated timestamp in milliseconds since the Unix epoch. */
   lastUpdated?: number
+  /** Unique git authors for this page. Empty unless the site opted in. */
+  contributors?: Array<JsSsgContributor>
   /** URL path. */
   path: string
   /** Entry page configuration (if layout: entry). */

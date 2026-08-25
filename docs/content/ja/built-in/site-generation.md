@@ -66,6 +66,7 @@ export default defineConfig({
 | `ogImage`         | —              | 静的フォールバックの OG 画像 URL。                                                                       |
 | `generateOgImage` | `false`        | ページごとの OG 画像（後述）。                                                                           |
 | `lastUpdated`     | `false`        | ページごとの git 最終コミット時刻を出す。                                                                |
+| `contributors`    | `false`        | ページごとの一意な git 作者。[コントリビューター](./contributors.md) を見てください。                    |
 | `pagination`      | `false`        | 記事のあとに前へ / 次へリンク。                                                                          |
 | `breadcrumbs`     | `false`        | サイトルートからサイドバー祖先までの道筋。                                                               |
 | `jsonLd`          | `false`        | TechArticle / WebSite / BreadcrumbList の JSON-LD。                                                      |
