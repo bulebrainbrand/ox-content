@@ -1,5 +1,33 @@
 # Changelog
 
+## [3.0.0-alpha.2] - 2026-08-25
+
+### Features
+
+- add file-tree icons and polish GitHub, tabs, and cards (#806)
+- typeset $…$ / $$…$$ with optional KaTeX (#805)
+- resolve per-document component imports for islands (#789) (#804)
+- add opt-in git contributors (#797)
+- add opt-in blog index authors tags and archive (#791)
+- export AST metadata from Vite modules (#795)
+- generate opt-in section index pages (#790)
+- add opt-in page resources and image processing (#798)
+- emit opt-in JSON-LD structured data (#794)
+- add opt-in typed hover overlays for TypeScript fences (#792)
+- add opt-in PWA manifest and service worker (#793)
+- drive framework islands from the MDX AST (#660) (#801)
+
+### Bug Fixes
+
+- first slice of input-triggered panic hardening (#799)
+- keep @types/vscode aligned with engines.vscode
+
+### Documentation
+
+- mark shipped 3.0 built-ins and align theme peers (#803)
+- match Japanese guides to English depth (#800)
+- add built-in MDX example and clarify defaults (#796)
+
 ## [3.0.0-alpha.1] - 2026-08-25
 
 ### Upgrade Notes
