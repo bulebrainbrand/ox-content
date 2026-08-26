@@ -34,9 +34,7 @@ import { resolveTypedHoverOptions } from "./typed-hover";
 import type { BuiltinPmOptions, OxContentOptions, ResolvedOptions } from "./types";
 import { resolveVersionsOptions } from "./versions";
 
-/**
- * Resolves plugin options with defaults.
- */
+/** Resolves plugin options with defaults. */
 export function resolveOptions(options: OxContentOptions): ResolvedOptions {
   return {
     srcDir: options.srcDir ?? "content",
@@ -122,6 +120,8 @@ export function resolveBuiltinEmbedOptions(
       pm: false,
       spotify: false,
       appleMusic: false,
+      audio: false,
+      video: false,
       stackBlitz: false,
       twitter: false,
       bluesky: false,
@@ -135,6 +135,8 @@ export function resolveBuiltinEmbedOptions(
     pm: resolvePmOptions(options?.pm),
     spotify: options?.spotify === true,
     appleMusic: options?.appleMusic === true,
+    audio: options?.audio === true,
+    video: options?.video === true,
     stackBlitz: options?.stackBlitz === true,
     twitter: resolveTwitterEmbedOptions(options?.twitter),
     bluesky: options?.bluesky === true,
