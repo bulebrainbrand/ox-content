@@ -31,7 +31,7 @@ import type { OxContentOptions, ResolvedOptions } from "./types";
 import { resolveOptions } from "./resolve-options";
 
 export type { OxContentOptions } from "./types";
-export type { TwitterEmbedOptions } from "./plugins";
+export type { RedditEmbedOptions, TwitterEmbedOptions } from "./plugins";
 export type {
   CodeAnnotationSyntax,
   CodeAnnotationsOptions,
@@ -991,6 +991,8 @@ export {
   fetchOgpData,
   collectOgpUrls,
   prefetchOgpData,
+  transformRedditEmbeds,
+  parseRedditPostReference,
   transformMermaidStatic,
   mermaidClientScript,
   transformAllPlugins,
@@ -1005,6 +1007,9 @@ export type {
   GitHubOptions,
   OgpData,
   OgpOptions,
+  RedditEmbedOptions,
+  RedditPostData,
+  RedditPostReference,
   MermaidOptions,
   TransformAllOptions,
 } from "./plugins";
