@@ -45,6 +45,8 @@ Contribution summary:
   output writes during the ryoppippi.com migration.
 - The opt-in `<NotByAI />` authorship badge was requested and first shipped
   in production during the ryoppippi.com Ox Content migration.
+- Reported that generated feed item URLs missed `ssg.routePrefix` while page
+  output and Markdown companions were mounted under the prefix.
 
 ## Third-party attribution
 
