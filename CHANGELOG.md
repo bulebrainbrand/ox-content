@@ -1,5 +1,88 @@
 # Changelog
 
+## [3.0.0-alpha.10] - 2026-08-26
+
+### Features
+
+- add static timeline blocks (#1024)
+- add component matrix (#1019)
+- add static image galleries (#1022)
+- add Reddit cards (#1021)
+- run Rust Go and Python examples (#1020)
+- generate OpenAPI reference docs (#1018)
+- add rich query model and result cards (#1017)
+- audit generated-site metadata conflicts (#1015)
+- polish GA authoring and runtime states (#1014)
+- accept Svelte document props (#1016)
+- add Speaker Deck cards (#1013)
+- add opt-in parameterized Markdown partials (#1012)
+- add native audio and video players (#1009)
+- add abbreviation and glossary term expansion (#898) (#1011)
+- render opt-in definition lists (#1008)
+- raise default theme and package quality (#858) (#1006)
+- generate tables from CSV and JSON sources (#1001)
+- expose output features to custom hosts (#878) (#1003)
+- add an opt-in NotByAI authorship badge (#1000)
+- harden checker and language-server diagnostics (#1004)
+- add an opt-in Apple Music iframe embed (#998)
+- add inline keyboard key notation (#942) (#1002)
+- generate self-hosted Iconify CSS for used icons (#933) (#1005)
+- add code-group fence syntax (#999)
+- add copy-as-markdown on documentation pages (#975) (#994)
+- support named feeds and channel metadata (#992)
+- expand native grammar coverage for common languages (#990)
+- fetch and self-host configured web fonts (#997)
+- expose built-in component CSS to module-transformer consumers (#995)
+- support mounting a content root under a route prefix (#931) (#991)
+- add provider selection and CI auto-detection (#926) (#988)
+- render Markdown from OxContentOptions (#877) (#986)
+- enrich tweet cards (#970)
+- render rich static cards (#965)
+- preview color presets (#950)
+- add satori renderer mode (#949)
+- add adjacent language aliases (#943)
+
+### Bug Fixes
+
+- use redirects.provider in the routePrefix test (#996)
+- continue eliminating panic-prone production paths (#853) (#993)
+- reserve built-in components before MDX island lowering (#879) (#989)
+- match react-tweet full-card actions and timezone (#922) (#987)
+- keep core SSG plugins in oxContentSvelte (#927) (#985)
+- skip HTML pages for host wildcard rules (#929) (#984)
+- preserve remote executor endpoints (#982)
+- preserve inline media attributes (#972)
+- normalize block embed paragraphs (#971)
+- contain mobile menu scrolling (#969)
+- preserve indented JSX children (#964)
+- add full-card copy affordance (#957)
+- quiet copy button chrome (#955)
+- refine mobile header nav (#953)
+- keep native preview external (#952)
+- separate steps preview from source (#939)
+- highlight tab markup examples as html (#938)
+- polish tabs and install examples (#934)
+- render StackBlitz iframes (#923)
+- tune magic link chips (#921)
+
+### Performance
+
+- lazy-load optional docs widgets by feature (#872) (#1010)
+- audit build, artifact, runtime, and rendered-output budgets (#1007)
+- avoid duplicate branch preview builds (#981)
+- skip benchmark helper previews (#980)
+- skip preview helper benchmarks (#979)
+- skip neutral preview releases (#978)
+- skip test-only benchmark runs (#977)
+- skip unchanged api doc writes (#967)
+- skip unchanged theme gallery writes (#966)
+- remove ineffective plugin imports (#959)
+- target PR benchmark lanes (#928)
+
+### Documentation
+
+- mark embed examples as mdx (#961)
+
 ## [3.0.0-alpha.9] - 2026-08-25
 
 ### Features
