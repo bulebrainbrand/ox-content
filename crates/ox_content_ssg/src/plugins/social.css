@@ -327,22 +327,3 @@
   border: 0;
   border-radius: 0;
 }
-
-/* Media iframes */
-.ox-spotify,
-.ox-apple-music,
-.ox-speaker-deck,
-.ox-stackblitz,
-.ox-audio,
-.ox-video {
-  display: block;
-  width: 100%;
-  margin: 1.5rem 0;
-  border: 0;
-  border-radius: 12px;
-}
-
-.ox-stackblitz {
-  border: 1px solid color-mix(in srgb, var(--octc-color-border) 74%, transparent);
-  border-radius: 8px;
-}
