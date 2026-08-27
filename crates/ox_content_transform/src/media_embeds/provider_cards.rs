@@ -137,7 +137,7 @@ pub(super) struct Card<'a> {
     pub(super) iframe: Option<&'a str>,
 }
 
-fn article_card<'a>(
+pub(super) fn article_card<'a>(
     element: &'a ComponentElement<'_>,
     modifier: &'static str,
     network: &'static str,
@@ -322,6 +322,11 @@ pub(super) fn parse_https_url(input: &str) -> Option<ParsedHttpsUrl<'_>> {
         path: if path.is_empty() { "/" } else { path },
         query: query.filter(|value| !value.is_empty()),
     })
+}
+
+/// Non-empty path segments, so `/a//b/` reads as `["a", "b"]`.
+pub(super) fn path_segments(path: &str) -> Vec<&str> {
+    path.split('/').filter(|segment| !segment.is_empty()).collect()
 }
 
 pub(super) fn host_in(host: &str, allowed: &[&str]) -> bool {

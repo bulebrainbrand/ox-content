@@ -1,4 +1,5 @@
 import { importNapiModule } from "../napi";
+import { hasMediaMarker } from "./media-marker";
 import {
   enrichProviderArticleEmbeds,
   normalizeProviderArticleOptions,
@@ -163,13 +164,43 @@ export interface MediaEmbedOptions {
    * @default false
    */
   webContainer?: boolean;
+
+  /**
+   * Render `<Loom>` recording cards.
+   * @default false
+   */
+  loom?: boolean;
+
+  /**
+   * Render `<Asciinema>` terminal-recording cards.
+   * @default false
+   */
+  asciinema?: boolean;
+
+  /**
+   * Render `<Figma>` file, design, board, and prototype cards.
+   * @default false
+   */
+  figma?: boolean;
+
+  /**
+   * Render `<Note>` note.com article cards.
+   * @default false
+   */
+  note?: boolean;
+
+  /**
+   * Render `<GoogleSlides>` deck cards.
+   * @default false
+   */
+  googleSlides?: boolean;
 }
 
 export async function transformMediaEmbeds(
   html: string,
   options: MediaEmbedOptions,
 ): Promise<string> {
-  if (!hasEnabledMediaEmbed(options) || !hasMediaMarker(html)) {
+  if (!hasEnabledMediaEmbed(options) || !(await hasMediaMarker(html))) {
     return html;
   }
 
@@ -235,6 +266,11 @@ export async function transformMediaEmbeds(
     threads: options.threads,
     instagram: options.instagram,
     webContainer: options.webContainer,
+    loom: options.loom,
+    asciinema: options.asciinema,
+    figma: options.figma,
+    note: options.note,
+    googleSlides: options.googleSlides,
   });
 
   reportRefusedEmbeds(transformed.diagnostics);
@@ -264,15 +300,12 @@ function hasEnabledMediaEmbed(options: MediaEmbedOptions): boolean {
     options.facebook ||
     options.threads ||
     options.instagram ||
-    options.webContainer,
-  );
-}
-
-function hasMediaMarker(html: string): boolean {
-  return (
-    /<(spotify|applemusic|speakerdeck|stackblitz|tweet|xpost|reddit|bluesky|googlemaps|qiita|zenn|npmpackage|cratesio|pypi|dockerhub|codepen|jsfiddle|observable|vimeo|twitch|discord|fediverse|mastodon|misskey|mixi2|facebook|threads|instagram|webcontainer)[\s/>]/i.test(
-      html,
-    ) || /<(Audio|Video)[\s/>]/.test(html)
+    options.webContainer ||
+    options.loom ||
+    options.asciinema ||
+    options.figma ||
+    options.note ||
+    options.googleSlides,
   );
 }
 
