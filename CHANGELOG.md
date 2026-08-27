@@ -1,5 +1,20 @@
 # Changelog
 
+## [3.0.0-alpha.13] - 2026-08-27
+
+### Features
+
+- expose browser-only table entrypoint (#1121)
+- build the workspace binaries with crane (#1117)
+
+### Bug Fixes
+
+- add CommonJS declaration condition (#1122)
+
+### Refactoring
+
+- move the flake to flake-parts and split it into nix/ modules (#1116)
+
 ## [3.0.0-alpha.12] - 2026-08-27
 
 ### Features
