@@ -8,12 +8,12 @@ If you just want to use the plugin or APIs, go back to [Getting Started](./getti
 
 Before you begin, ensure you have the following installed:
 
-| Requirement   | Version | Installation                                                                         |
-| ------------- | ------- | ------------------------------------------------------------------------------------ |
-| **Rust**      | 1.95+   | Provided by `nix develop` (pinned in `flake.nix`) or [rustup.rs](https://rustup.rs/) |
-| **Node.js**   | 26+     | Provided by `nix develop` or managed via `.node-version`                             |
-| **Vite+**     | Latest  | Available as `vp` inside the dev shell                                               |
-| **wasm-pack** | Latest  | Provided by `nix develop`; needed when you run `vp run build:wasm`                   |
+| Requirement   | Version | Installation                                                                                   |
+| ------------- | ------- | ---------------------------------------------------------------------------------------------- |
+| **Rust**      | 1.95+   | Provided by `nix develop` (pinned in `rust-toolchain.toml`) or [rustup.rs](https://rustup.rs/) |
+| **Node.js**   | 26+     | Provided by `nix develop` or managed via `.node-version`                                       |
+| **Vite+**     | Latest  | Available as `vp` inside the dev shell                                                         |
+| **wasm-pack** | Latest  | Provided by `nix develop`; needed when you run `vp run build:wasm`                             |
 
 ## Clone and Bootstrap
 
@@ -95,6 +95,7 @@ vp run bench:bundle
 ox-content/
 ├── Cargo.toml              # Workspace configuration
 ├── flake.nix               # Nix dev shell (Node.js, workspace bootstrap, Rust, Vite+ wrapper)
+├── rust-toolchain.toml     # Rust channel, components, and targets for Nix and rustup alike
 ├── .node-version           # Node.js version for CI / setup-node compatibility
 ├── vite.config.ts          # Vite+ workspace task graph
 ├── crates/                 # Rust crates

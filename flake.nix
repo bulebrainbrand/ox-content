@@ -29,14 +29,7 @@
         lib = pkgs.lib;
         nodejs = pkgs.nodejs_26;
         pnpm = pkgs.pnpm;
-        rustToolchain = pkgs.rust-bin.stable."1.98.0".default.override {
-          extensions = [
-            "clippy"
-            "rust-src"
-            "rustfmt"
-          ];
-          targets = [ "wasm32-unknown-unknown" ];
-        };
+        rustToolchain = pkgs.rust-bin.fromRustupToolchainFile ./rust-toolchain.toml;
         workspaceVp = pkgs.writeShellApplication {
           name = "vp";
           runtimeInputs = [
@@ -115,7 +108,7 @@
             nativeBuildInputs = [
               pkgs.makeWrapper
             ]
-            ++ lib.optionals pkgs.stdenv.isLinux [ pkgs.autoPatchelfHook ];
+            ++ lib.optionals pkgs.stdenv.hostPlatform.isLinux [ pkgs.autoPatchelfHook ];
 
             installPhase = ''
               runHook preInstall
@@ -151,7 +144,6 @@
             workspaceVp
             blacksmith
             rustToolchain
-            pkgs.rust-analyzer
             pkgs.wasm-pack
             pkgs.wasm-bindgen-cli
             pkgs.binaryen
@@ -163,7 +155,7 @@
             pkgs.pkg-config
             pkgs.rsync
           ]
-          ++ lib.optionals pkgs.stdenv.isDarwin [ pkgs.libiconv ];
+          ++ lib.optionals pkgs.stdenv.hostPlatform.isDarwin [ pkgs.libiconv ];
 
           RUST_BACKTRACE = "1";
           RUST_SRC_PATH = "${rustToolchain}/lib/rustlib/src/rust/library";
