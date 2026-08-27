@@ -8,7 +8,13 @@ import { enhancePlayHtml } from "../../../ox-content-code-play/src/html";
 import { parsePlayFences } from "../../../ox-content-code-play/src/markdown";
 import { decodePayload, encodePayload } from "../../../ox-content-code-play/src/payload";
 import { payloadFromFence } from "../../../ox-content-code-play/src/payload-factory";
-import { corsHeaders, fitsViewport, renderWidget, runWidget } from "./code-play-helpers";
+import {
+  corsHeaders,
+  expectCompactCodePlayChrome,
+  fitsViewport,
+  renderWidget,
+  runWidget,
+} from "./code-play-helpers";
 
 test("hydrates written SSG HTML and runs JavaScript in the browser sandbox", async ({ page }) => {
   const outDir = await mkdtemp(path.join(tmpdir(), "ox-code-play-vrt-"));
@@ -50,6 +56,7 @@ test("hydrates written SSG HTML and runs JavaScript in the browser sandbox", asy
     await expect(page.locator(".ox-code-play__stdio-line--stdout")).toBeVisible();
     await expect(page.locator('[data-ox-action="typecheck"]')).toHaveCount(0);
     await expect(page.locator('[data-ox-action="cancel"]')).toBeHidden();
+    await expectCompactCodePlayChrome(page);
   } finally {
     await rm(outDir, { recursive: true, force: true });
   }
