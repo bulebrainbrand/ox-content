@@ -1,5 +1,74 @@
 # Changelog
 
+## [3.0.0-alpha.11] - 2026-08-27
+
+### Features
+
+- distinguish the fetch-side embed failure modes (#1112)
+- expose redirect planning through NAPI (#1105)
+- persist provider card metadata across builds (#1102)
+- add CodeSandbox playground cards (#1098)
+- bring native feed generation to parity with the TypeScript writer (#1092)
+- report native artifact size on migration PRs (#1093)
+- add PowerShell, Zig, Haskell, Elixir, Scala, and R grammars (#1067)
+- add Less, XML, Lua, HCL, Make, and diff grammars (#1060)
+- expose pure feed file rendering (#1059)
+- add build-time BudouX segmentation (#1057)
+- add bibliography-backed citations (#1053)
+- add labeled cross references (#1051)
+- add Graphviz DOT rendering (#1049)
+- add Vimeo and Twitch cards (#1048)
+- add playground provider cards (#1047)
+- add GitHub resource cards (#1046)
+- add package registry cards (#1045)
+- accept programmatic item sources (#1044)
+- add provider cards (#1025)
+- support host-only output (#1041)
+- add conditional content blocks (#1027)
+- add project sandbox payloads (#1026)
+- polish advanced authoring affordances (#1023)
+
+### Bug Fixes
+
+- register the redirect bindings across the wrapper surface (#1109)
+- ship provider card CSS on pages built only from provider cards (#1096)
+- stop double-spacing lines in titled code blocks (#1089)
+- drop loading states no embed can reach (#1097)
+- degrade an unresolvable embed to a link instead of leaking its tag (#1082)
+- repair the live embed examples on the embeds page (#1086)
+- theme the embed error colour and scale slide decks (#1091)
+- stop highlighting mdx fences as JavaScript (#1085)
+- highlight the commands inside package-manager tabs (#1088)
+- parse feed dates through the native parser (#1068)
+- honour reduced-motion in embed and island styles (#1065)
+- name the Spotify embed frame (#1064)
+- untrack generated API reference markdown (#1062)
+- repair Open Graph card metadata and drop the favicon beacon (#1061)
+- make markdown tables keyboard-scrollable (#1058)
+- hydrate server-rendered islands (#1056)
+- harden social component theme resets (#1040)
+- apply route prefix to item URLs (#1043)
+- skip output writes on dev server close (#1042)
+
+### Performance
+
+- stop paying for work the cache already did (#1076)
+
+### Refactoring
+
+- move the pass into Rust (#1111)
+- render crawl manifests through the native generator (#1104)
+- render feed bodies through the native generator (#1103)
+- drive media embeds from a provider registry (#1066)
+- resolve YouTube video ids through native transform (#1063)
+- resolve page routes through native ssg (#1028)
+- parse markdown source frontmatter natively (#1029)
+
+### Documentation
+
+- point Spotify and Apple Music examples at real releases (#1087)
+- audit TypeScript modules for Rust migration (#1078)
+
 ## [3.0.0-alpha.10] - 2026-08-26
 
 ### Features
