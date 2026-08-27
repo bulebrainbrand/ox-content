@@ -44,7 +44,7 @@ description: Markdown 中の HTML 風タグで書く GitHub / OG カード、パ
 以下の例は読みやすさのため属性を複数行に分けています。この形式には MDX が必要です。素の `.md` ファイルでは、タグの開始と `>` を同じ行に収める必要があります。
 
 ```md
-<Bluesky url="https://bsky.app/profile/bsky.app/post/3l6oveex3ii2l" handle="bsky.app">…</Bluesky>
+<Bluesky url="https://bsky.app/profile/danabra.mov/post/3mqzxmtfnxk2b" handle="danabra.mov">…</Bluesky>
 ```
 
 CommonMark が生の HTML ブロックを開始するのは、開始タグがその行の中で閉じている場合だけです。行末でタグが開いたままだと本文として扱われ、属性はテキストとして描画され、URL はリンクになり、`>` だけの行は引用ブロックになります。複数行で書きたい場合は `mdx` を有効にしてください。
@@ -256,15 +256,15 @@ pnpm vite preview</code></pre>
 YouTube 埋め込みは SSG ビルドと dev preview で常に処理されます。iframe はプライバシー強化モード（`youtube-nocookie.com`）と遅延読み込みが既定です。
 
 ```mdx
-<youtube id="aqz-KE-bpKQ" title="Big Buck Bunny" />
+<youtube id="Ny8pjacNIv8" title="An Evening with Ron Carter at Emmet’s Place" />
 ```
 
-<youtube id="aqz-KE-bpKQ" title="Big Buck Bunny" />
+<youtube id="Ny8pjacNIv8" title="An Evening with Ron Carter at Emmet’s Place" />
 
 `id`、`url`、`href` 属性を受け付けます。`youtu.be`、`watch?v=`、`shorts`、`embed` の URL 形はどれも認識します。`start` は非負整数の秒で、iframe URL に `?start=` を付けます。不正、負、小数、オーバーフロー、重複した値は無視します。`start` を省略すると、これまでの URL のままです。
 
 ```mdx
-<youtube id="aqz-KE-bpKQ" title="Big Buck Bunny" start="4190" />
+<youtube id="Ny8pjacNIv8" title="An Evening with Ron Carter at Emmet’s Place" start="4190" />
 ```
 
 ## Twitter / X
@@ -273,18 +273,18 @@ YouTube 埋め込みは SSG ビルドと dev preview で常に処理されます
 
 ```mdx
 <XPost
-  url="https://x.com/jack/status/20"
-  displayName="jack"
-  handle="jack"
-  dateLabel="Mar 21, 2006"
-  likes="2.4M"
-  views="10M"
+  url="https://x.com/evanyou/status/1688035849638977536"
+  displayName="Evan You"
+  handle="evanyou"
+  dateLabel="Aug 6, 2023"
+  replies="134"
+  likes="6.2K"
 >
-  just setting up my twttr
+  Thank you JavaScript.
 </XPost>
 ```
 
-<XPost url="https://x.com/jack/status/20" displayName="jack" handle="jack" dateLabel="Mar 21, 2006" likes="2.4M" views="10M">just setting up my twttr</XPost>
+<XPost url="https://x.com/evanyou/status/1688035849638977536" displayName="Evan You" handle="evanyou" dateLabel="Aug 6, 2023" replies="134" likes="6.2K">Thank you JavaScript.</XPost>
 
 オブジェクト形式を使うと、ビルド時に本文、著者、アバター、写真、動画ポスターを取り、自分のオリジンから配信します。取ってきたカードには、日時、元投稿リンク、利用可能な返信/リポスト/引用/いいね/表示数、引用投稿の入れ子カード、「Replying to @…」リンクも含まれます。`appearance: "full"` は sveltweet / react-tweet 形の静的カードです。
 
@@ -354,13 +354,13 @@ oxContent({
 `embeds.bluesky` は静的カードを描画します。カードに出すテキストは要素本文なので、ネットワーク要求は一切要りません。
 
 ```mdx
-<Bluesky url="https://bsky.app/profile/bsky.app/post/3l6oveex3ii2l">
-  👋 Bluesky is an open social network
+<Bluesky url="https://bsky.app/profile/danabra.mov/post/3mqzxmtfnxk2b">
+  the urge to fix everything incorrectly
 </Bluesky>
 ```
 
-<Bluesky url="https://bsky.app/profile/bsky.app/post/3l6oveex3ii2l">
-  👋 Bluesky is an open social network
+<Bluesky url="https://bsky.app/profile/danabra.mov/post/3mqzxmtfnxk2b">
+  the urge to fix everything incorrectly
 </Bluesky>
 
 ## プロバイダカード
@@ -461,17 +461,17 @@ Twitch player URL は Twitch の embed 要件に合わせ、安全な `parent` d
 `embeds.spotify` はトラック、アルバム、プレイリスト、エピソード、番組、アーティスト向けの公式 iframe プレーヤーを描画します。
 
 ```mdx
-<Spotify url="https://open.spotify.com/track/4uLU6hMCjMI75M1A2tKUQC" />
+<Spotify url="https://open.spotify.com/track/2VEQTuWiuEC7J8kkA7h7xq" />
 ```
 
-<Spotify url="https://open.spotify.com/track/4uLU6hMCjMI75M1A2tKUQC" />
+<Spotify url="https://open.spotify.com/track/2VEQTuWiuEC7J8kkA7h7xq" />
 
 出力は遅延読み込み付きで `open.spotify.com/embed/...` を指す `<iframe>` です。上の静的カードと違い、本物の第三者プレーヤーなのでオプトインのままです。
 
 フレームには再生対象に応じた名前（`Spotify track`、`Spotify playlist` など）が付くので、スクリーンリーダーが「フレーム」より有用な読み上げをします。自分で名前を付けるには `title` を渡します。
 
 ```mdx
-<Spotify url="https://open.spotify.com/album/..." title="下で取り上げるアルバム" />
+<Spotify url="https://open.spotify.com/album/25Dgs9rR8ETpGCwD0wUv0q" title="Joel Ross — nublues" />
 ```
 
 ## Apple Music
@@ -479,10 +479,10 @@ Twitch player URL は Twitch の embed 要件に合わせ、安全な `parent` d
 `embeds.appleMusic` はアルバム、プレイリスト、曲、アーティスト、ミュージックビデオ向けの公式 iframe プレーヤーを描画します。
 
 ```mdx
-<AppleMusic url="https://music.apple.com/gb/album/1989-taylors-version/1708308989" />
+<AppleMusic url="https://music.apple.com/us/album/ummg-feat-taylor-eigsti/1769360313?i=1769360314" />
 ```
 
-<AppleMusic url="https://music.apple.com/gb/album/1989-taylors-version/1708308989" />
+<AppleMusic url="https://music.apple.com/us/album/ummg-feat-taylor-eigsti/1769360313?i=1769360314" />
 
 `music.apple.com` の共有 URL は `embed.music.apple.com` に書き換えられ、ストアフロントとパス、曲選択の `i=` クエリは残します。すでに埋め込み用の `embed.music.apple.com` URL も、同じホスト／パス検査のあと受け付けます。HTTPS でない URL、似せたホスト、認証情報、フラグメント、不正なパスは iframe にせず、書いたまま残します。
 
