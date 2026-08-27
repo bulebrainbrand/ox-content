@@ -1,5 +1,15 @@
 # Changelog
 
+## [3.0.0-alpha.12] - 2026-08-27
+
+### Features
+
+- add asciinema, Loom, Figma, note.com, Google Slides, and Replit (#1113)
+
+### Bug Fixes
+
+- refresh the flake inputs and pin Rust from rust-toolchain.toml (#1115)
+
 ## [3.0.0-alpha.11] - 2026-08-27
 
 ### Features
