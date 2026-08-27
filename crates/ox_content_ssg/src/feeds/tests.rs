@@ -15,6 +15,7 @@ fn item(
         last_updated: last_updated.map(str::to_string),
         draft: false,
         unlisted: false,
+        ..FeedItem::default()
     }
 }
 
@@ -38,6 +39,7 @@ fn enabled(site_url: Option<&str>) -> FeedsOptions {
         json_url: "https://example.com/feed.json".to_string(),
         formats: vec![FeedFormat::Rss, FeedFormat::Atom, FeedFormat::Json],
         limit: 20,
+        ..FeedsOptions::default()
     }
 }
 
