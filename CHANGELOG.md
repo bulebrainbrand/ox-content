@@ -1,5 +1,15 @@
 # Changelog
 
+## [3.0.0-alpha.15] - 2026-08-28
+
+### Bug Fixes
+
+- isolate full cards from host prose styles (#1159)
+
+### Performance
+
+- emit KaTeX assets only for sites that render math (#1158)
+
 ## [3.0.0-alpha.14] - 2026-08-28
 
 ### Features
