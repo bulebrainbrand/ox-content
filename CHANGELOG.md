@@ -1,5 +1,28 @@
 # Changelog
 
+## [3.0.0-alpha.14] - 2026-08-28
+
+### Features
+
+- stop shipping KaTeX parse failures into the page (#1156)
+- prefix config asset paths with base (#1154)
+- build edit links for GitLab, Bitbucket, and Gitea (#1152)
+- expose token CSS rendering for bare and custom hosts (#1131)
+
+### Bug Fixes
+
+- run the transformers hook (#1153)
+- keep the build machine's path out of edit links (#1151)
+- step the pager over sidebar group headers (#1150)
+- end bare URLs at CJK sentence punctuation (#1148)
+- stop the 404 page from marking every sidebar group active (#1149)
+- keep the [[toc]] directive working (#1155)
+- read page titles through heading markup (#1147)
+- repair card presentation defects (#1134)
+- stop reading Markdown link labels as citations (#1135)
+- match the table focus ring to the scrollable marker (#1130)
+- polish component previews (#1123)
+
 ## [3.0.0-alpha.13] - 2026-08-27
 
 ### Features
