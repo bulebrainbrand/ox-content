@@ -1,5 +1,16 @@
 # Changelog
 
+## [3.0.0-alpha.17] - 2026-08-28
+
+### Features
+
+- expose custom host copy controls (#1168)
+- add Shiki migration variants (#1166)
+
+### Bug Fixes
+
+- match full-card action geometry (#1169)
+
 ## [3.0.0-alpha.16] - 2026-08-28
 
 ### Features
