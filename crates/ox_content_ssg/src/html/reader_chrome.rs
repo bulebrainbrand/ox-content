@@ -46,7 +46,6 @@ const COPY_BUTTON: &str = concat!(
     "<span class=\"ox-copy-status\" data-ox-copy-status role=\"status\" ",
     "aria-live=\"polite\"></span>"
 );
-const EXTERNAL_ICON: &str = "<span class=\"ox-external-icon\" aria-hidden=\"true\"></span>";
 
 /// Rewrites article HTML. Fenced code is never treated as a link target.
 pub(super) fn apply_reader_chrome(html: &str, chrome: ReaderChrome) -> String {
@@ -149,7 +148,7 @@ fn rewrite_anchor(html: &str) -> Option<(String, usize)> {
             }
             markup.push('>');
             markup.push_str(inner);
-            markup.push_str(EXTERNAL_ICON);
+            markup.push_str(external_marker::external_marker(inner));
             markup.push_str("</a>");
             Some((markup, tag_end + 1 + inner.len() + close_len))
         }
@@ -346,5 +345,6 @@ fn decode_one_entity(ent: &str) -> Option<(char, usize)> {
     None
 }
 
+mod external_marker;
 #[cfg(test)]
 mod tests;
