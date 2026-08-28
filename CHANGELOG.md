@@ -1,5 +1,15 @@
 # Changelog
 
+## [3.0.0-alpha.16] - 2026-08-28
+
+### Features
+
+- add Dragon dark variant (#1163)
+
+### Bug Fixes
+
+- isolate cards from prose image rules (#1162)
+
 ## [3.0.0-alpha.15] - 2026-08-28
 
 ### Bug Fixes
