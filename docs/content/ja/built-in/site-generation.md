@@ -262,7 +262,57 @@ oxContent({
 </p>
 ```
 
-編集 URL に結合する前にソースパスからプレフィックスを除く必要があるときは `rootDir` を設定します。
+既定ではページのパスはビルドを実行したディレクトリからの相対になります。通常の構成ではリポジトリのルートです。
+
+ソースルートがリポジトリの別の場所（パッケージやドキュメント用のワークスペース）にあるときは `rootDir` を設定します。値はリポジトリの中で `srcDir` がある場所を表し、ページのパスは `srcDir` からの相対になります。
+
+```ts
+oxContent({
+  srcDir: "docs",
+  editThisPage: {
+    repoUrl: "https://gitlab.example.com/owner/repo",
+    branch: "main",
+    rootDir: "packages/site/docs",
+  },
+});
+```
+
+```html
+<a href="https://gitlab.example.com/owner/repo/edit/main/packages/site/docs/guide/nested.md"></a>
+```
+
+### 他のフォージ
+
+フォージごとにウェブエディタのパスが違うため、別のフォージ向けのリンクは 404 になります。
+
+| Provider    | 形                                        |
+| ----------- | ----------------------------------------- |
+| `github`    | `<repoUrl>/edit/<branch>/<path>`          |
+| `gitlab`    | `<repoUrl>/-/edit/<branch>/<path>`        |
+| `bitbucket` | `<repoUrl>/src/<branch>/<path>?mode=edit` |
+| `gitea`     | `<repoUrl>/_edit/<branch>/<path>`         |
+
+`gitlab.com`、`bitbucket.org`、`codeberg.org`、`gitea.com` は `repoUrl` から判別するので設定は要りません。自前でホストしている場合はホスト名からソフトウェアが分からないので `provider` を指定します。
+
+```ts
+oxContent({
+  editThisPage: {
+    repoUrl: "https://git.example.com/owner/repo",
+    provider: "gitlab",
+  },
+});
+```
+
+`gitea` は同じパスを引き継いだ Forgejo も含みます。どれにも当てはまらないときは `urlPattern` で形そのものを差し替えます。`{repoUrl}`、`{branch}`、`{path}` を埋め、それ以外の波括弧はそのまま残します。
+
+```ts
+oxContent({
+  editThisPage: {
+    repoUrl: "https://git.example.com/owner/repo",
+    urlPattern: "{repoUrl}/ui/edit?ref={branch}&file={path}",
+  },
+});
+```
 
 ## コレクション
 

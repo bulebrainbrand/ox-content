@@ -3537,11 +3537,53 @@ export interface EditThisPageOptions {
   /**
    * Source root inside the repository, used before the page path.
    *
-   * Set this when `srcDir` is nested in a package or docs workspace.
+   * Set this when `srcDir` is nested in a package or docs workspace: the
+   * value says where `srcDir` lives inside the repository, and the page
+   * path is measured from `srcDir` rather than from the directory the build
+   * runs in.
+   *
+   * @example
+   * ```ts
+   * // repository holds packages/site/docs, srcDir is "docs"
+   * rootDir: 'packages/site/docs'
+   * // -> <repoUrl>/edit/<branch>/packages/site/docs/guide/nested.md
+   * ```
    *
    * @default undefined
    */
   rootDir?: string;
+
+  /**
+   * Forge whose edit-URL shape to use.
+   *
+   * Every forge exposes a web editor at a different path — GitLab puts a
+   * `/-/` scope separator in front of it, Bitbucket edits through its source
+   * view, Gitea and Forgejo use `_edit` — so a site on the wrong shape links
+   * to a 404.
+   *
+   * Inferred from the `repoUrl` host when omitted (`gitlab.com`,
+   * `bitbucket.org`, `codeberg.org`, `gitea.com`), falling back to
+   * `'github'`. Set it explicitly for a self-hosted instance, whose hostname
+   * says nothing about the software behind it.
+   *
+   * @default inferred from `repoUrl`
+   */
+  provider?: EditThisPageProvider;
+
+  /**
+   * Edit-URL template, for a forge or an instance the shapes above miss.
+   *
+   * Understands `{repoUrl}`, `{branch}`, and `{path}`; other braces are
+   * left as written. Takes precedence over `provider`.
+   *
+   * @example
+   * ```ts
+   * urlPattern: '{repoUrl}/ui/edit?ref={branch}&file={path}'
+   * ```
+   *
+   * @default the pattern for the resolved `provider`
+   */
+  urlPattern?: string;
 
   /**
    * Link text rendered in the page footer.
@@ -3554,6 +3596,13 @@ export interface EditThisPageOptions {
 }
 
 /**
+ * Forges with a known edit-URL shape.
+ *
+ * `'gitea'` covers Forgejo, which kept the same path.
+ */
+export type EditThisPageProvider = "github" | "gitlab" | "bitbucket" | "gitea";
+
+/**
  * Resolved edit-link transform options.
  */
 export interface ResolvedEditThisPageOptions {
@@ -3561,6 +3610,8 @@ export interface ResolvedEditThisPageOptions {
   repoUrl?: string;
   branch: string;
   rootDir?: string;
+  provider?: EditThisPageProvider;
+  urlPattern?: string;
   label: string;
 }
 

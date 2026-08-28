@@ -416,6 +416,9 @@ interface JsTransformOptions {
     repoUrl?: string;
     branch?: string;
     rootDir?: string;
+    srcDir?: string;
+    provider?: string;
+    urlPattern?: string;
     label?: string;
   };
 
@@ -619,6 +622,8 @@ export interface SsgTransformOptions {
   baseUrl?: string;
   /** Source file path for relative link resolution */
   sourcePath?: string;
+  /** Absolute source root, used to place pages inside the repository */
+  srcDir?: string;
 }
 
 export async function transformMarkdown(
@@ -750,6 +755,12 @@ export async function transformMarkdown(
           repoUrl: options.editThisPage.repoUrl,
           branch: options.editThisPage.branch,
           rootDir: options.editThisPage.rootDir,
+          // `rootDir` is a repository path, so the page path it prefixes has
+          // to be measured from the source root rather than from wherever
+          // the build happens to run.
+          srcDir: ssgOptions?.srcDir,
+          provider: options.editThisPage.provider,
+          urlPattern: options.editThisPage.urlPattern,
           label: options.editThisPage.label,
         }
       : undefined,

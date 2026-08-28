@@ -105,6 +105,7 @@ export type {
   SanitizeOptions,
   ResolvedSanitizeOptions,
   EditThisPageOptions,
+  EditThisPageProvider,
   ResolvedEditThisPageOptions,
   CodeBlockLintOptions,
   ResolvedCodeBlockLintOptions,
