@@ -219,7 +219,7 @@ fn test_table_css_draws_each_separator_once() {
         "the table border must own the outer inline and block edges"
     );
     assert!(
-        SSG_CSS.contains(".content table[data-ox-table-scrollable=\"true\"]:focus-visible")
+        SSG_CSS.contains(".content table[data-ox-table-scrollable]:focus-visible")
             && SSG_CSS.contains("outline: var(--octc-focus-ring);"),
         "overflowing Markdown tables need a visible keyboard focus indicator"
     );
