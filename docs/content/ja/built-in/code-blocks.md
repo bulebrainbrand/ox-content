@@ -58,6 +58,7 @@ tree-sitter 系列と合うメンテされた専用文法がまだありませ�
 | YAML       | `yaml`, `yml`                                                      |
 | Markdown   | `markdown`, `md`                                                   |
 | Bash       | `bash`, `sh`, `shell`, `zsh`, `shellscript`                        |
+| Fish       | `fish`                                                             |
 | TOML       | `toml`                                                             |
 | WGSL       | `wgsl`                                                             |
 | SQL        | `sql`                                                              |
@@ -66,6 +67,7 @@ tree-sitter 系列と合うメンテされた専用文法がまだありませ�
 | Ruby       | `ruby`, `rb`                                                       |
 | PHP        | `php`                                                              |
 | Nix        | `nix`                                                              |
+| Nushell    | `nu`, `nushell`                                                    |
 | C#         | `csharp`, `cs`                                                     |
 | Swift      | `swift`                                                            |
 | Kotlin     | `kotlin`, `kt`                                                     |
@@ -73,6 +75,8 @@ tree-sitter 系列と合うメンテされた専用文法がまだありませ�
 | Lua        | `lua`                                                              |
 | HCL        | `hcl`, `terraform`, `tf`, `tfvars`                                 |
 | Make       | `make`, `makefile`, `mk`                                           |
+| CMake      | `cmake`                                                            |
+| Vimscript  | `vimscript`, `vim`                                                 |
 | Diff       | `diff`, `patch`, `udiff`                                           |
 | PowerShell | `powershell`, `pwsh`, `ps1`, `psm1`                                |
 | Zig        | `zig`, `zon`                                                       |
@@ -80,6 +84,33 @@ tree-sitter 系列と合うメンテされた専用文法がまだありませ�
 | Elixir     | `elixir`, `ex`, `exs`                                              |
 | Scala      | `scala`, `sc`, `sbt`                                               |
 | R          | `r`, `rscript`                                                     |
+
+```nu
+let expensive = open usage.json
+  | where cost > 10
+  | get project
+  | uniq
+```
+
+```fish
+function fish_prompt
+  set -l branch (git branch --show-current)
+  echo "$branch" | string upper
+end
+```
+
+```cmake
+cmake_minimum_required(VERSION 3.28)
+project(App)
+add_executable(app main.cpp)
+```
+
+```vimscript
+function! s:Run(cmd) abort
+  let l:output = execute(a:cmd)
+  echo "done"
+endfunction
+```
 
 未知のタグは普通の `<pre><code>` のままです。例: `perl`、`elm`、
 `assembly`、`asm`、`llvm`、`clojure`、`brainfuck`。無関係な文法へ alias

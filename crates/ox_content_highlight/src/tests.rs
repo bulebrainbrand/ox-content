@@ -1,19 +1,5 @@
 use super::*;
-use crate::test_support::visible_text;
-
-fn assert_text_has_capture_token(html: &str, text: &str, capture: &str) {
-    let token = crate::theme::token_for(capture).expect(capture);
-    let mut style = String::new();
-    crate::theme::push_color(&mut style, token);
-    let escaped = text
-        .replace('&', "&amp;")
-        .replace('<', "&lt;")
-        .replace('>', "&gt;")
-        .replace('"', "&quot;")
-        .replace('\'', "&#39;");
-    let needle = format!("<span style=\"{style}\">{escaped}</span>");
-    assert!(html.contains(&needle), "missing {capture} token for {text:?}\n{html}");
-}
+use crate::test_support::{assert_text_has_capture_token, visible_text};
 
 #[test]
 fn unknown_language_is_left_to_the_caller() {
@@ -29,6 +15,7 @@ fn aliases_resolve_to_the_same_grammar() {
     for alias in ["bash", "sh", "shell", "zsh"] {
         assert!(supports(alias), "{alias} should be supported");
     }
+    assert!(supports("fish"));
     for alias in ["jsonc", "json5", "webmanifest"] {
         assert!(supports(alias), "{alias} should be supported");
     }
@@ -51,6 +38,9 @@ fn aliases_resolve_to_the_same_grammar() {
     }
     assert!(supports("php"));
     assert!(supports("nix"));
+    for alias in ["nu", "nushell"] {
+        assert!(supports(alias), "{alias} should be supported");
+    }
     for alias in ["csharp", "cs"] {
         assert!(supports(alias), "{alias} should be supported");
     }
@@ -70,6 +60,10 @@ fn aliases_resolve_to_the_same_grammar() {
         assert!(supports(alias), "{alias} should be supported");
     }
     for alias in ["makefile", "make", "mk"] {
+        assert!(supports(alias), "{alias} should be supported");
+    }
+    assert!(supports("cmake"));
+    for alias in ["vimscript", "vim"] {
         assert!(supports(alias), "{alias} should be supported");
     }
     for alias in ["powershell", "pwsh", "ps1"] {
@@ -95,6 +89,14 @@ fn aliases_resolve_to_the_same_grammar() {
     assert_eq!(
         highlight_to_html("export const C = () => <p />;\n", "typescriptreact"),
         highlight_to_html("export const C = () => <p />;\n", "tsx")
+    );
+    assert_eq!(
+        highlight_to_html("let x = true\n", "nu"),
+        highlight_to_html("let x = true\n", "nushell")
+    );
+    assert_eq!(
+        highlight_to_html("echo \"hi\"\n", "vim"),
+        highlight_to_html("echo \"hi\"\n", "vimscript")
     );
 }
 
@@ -195,6 +197,7 @@ fn added_grammars_tokenize_and_escape() {
         ("def f(x)\n  x < 1 && \"a & b\"\nend\n", "rb"),
         ("<?php echo \"a < b & c > d\";\n", "php"),
         ("let x = \"a < b & c\"; in x\n", "nix"),
+        ("let x = \"a < b & c\"\n", "nu"),
         ("class A { string F() { return \"a < b & c\"; } }\n", "cs"),
         ("let s = \"a < b & c\"\n", "swift"),
         ("fun main() { val s = \"a < b & c\" }\n", "kt"),
@@ -202,9 +205,12 @@ fn added_grammars_tokenize_and_escape() {
         ("--- a/x\n+++ b/x\n-a < b & c\n+a < b & d\n", "diff"),
         ("@c: red;\n.a::after { content: \"a < b & c\"; }\n", "less"),
         ("<?xml version=\"1.0\"?>\n<a b=\"c\">x &lt; y &amp; z</a>\n", "xml"),
+        ("echo \"a < b & c\" | string upper\n", "fish"),
         ("local s = \"a < b & c\"\n", "lua"),
         ("variable \"x\" {\n  default = \"a < b & c\"\n}\n", "terraform"),
         ("# a < b & c\nall:\n\techo hi\n", "makefile"),
+        ("set(NAME \"a < b & c\")\n", "cmake"),
+        ("echo \"a < b & c\"\n", "vimscript"),
         ("Write-Host \"a < b & c\"\n", "powershell"),
         ("-- a < b & c\nmain = putStrLn \"hi\"\n", "haskell"),
         ("# a < b & c\ndefmodule M do\nend\n", "elixir"),
@@ -274,6 +280,40 @@ in with builtins; {
     assert_text_has_capture_token(&html, "https://example.com/pkg", "text.uri");
     assert_text_has_capture_token(&html, "# production corpus shape", "comment");
     assert_text_has_capture_token(&html, "${", "punctuation.special");
+}
+
+#[test]
+fn nushell_highlights_native_language_constructs() {
+    let code = r#"let expensive = open --raw usage.json
+  | where cost > 10
+  | get project
+  | uniq
+
+def summarise [rows: list<record>] {
+  $rows | group-by project
+  { project: "core", active: true }
+  ls err> errors.log
+  # production corpus shape < &
+}
+"#;
+
+    let html = highlight_to_html(code, "nu").expect("nu is supported");
+    assert_eq!(visible_text(&html), code);
+    assert_text_has_capture_token(&html, "let", "keyword");
+    assert_text_has_capture_token(&html, "def", "keyword");
+    assert_text_has_capture_token(&html, "open", "function.builtin");
+    assert_text_has_capture_token(&html, "raw", "attribute");
+    assert_text_has_capture_token(&html, "|", "operator");
+    assert_text_has_capture_token(&html, ">", "operator");
+    assert_text_has_capture_token(&html, "err>", "operator");
+    assert_text_has_capture_token(&html, "expensive", "variable.parameter");
+    assert_text_has_capture_token(&html, "rows", "variable.parameter");
+    assert_text_has_capture_token(&html, "project", "property");
+    assert_text_has_capture_token(&html, "list", "type");
+    assert_text_has_capture_token(&html, "record", "type");
+    assert_text_has_capture_token(&html, "\"core\"", "string");
+    assert_text_has_capture_token(&html, "true", "constant.builtin");
+    assert_text_has_capture_token(&html, "# production corpus shape < &", "comment");
 }
 
 #[test]

@@ -57,6 +57,14 @@ pub(super) fn grammars() -> &'static [Grammar] {
             "",
         ),
         grammar!(
+            "fish",
+            ["fish"],
+            tree_sitter_fish::language(),
+            tree_sitter_fish::HIGHLIGHTS_QUERY,
+            "",
+            "",
+        ),
+        grammar!(
             "powershell",
             ["powershell", "pwsh", "ps1", "psm1"],
             tree_sitter_powershell::LANGUAGE,
@@ -102,6 +110,22 @@ pub(super) fn grammars() -> &'static [Grammar] {
             tree_sitter_make::LANGUAGE,
             tree_sitter_make::HIGHLIGHTS_QUERY,
             "",
+            "",
+        ),
+        grammar!(
+            "cmake",
+            ["cmake"],
+            tree_sitter_cmake::LANGUAGE,
+            include_str!("../../queries/cmake-highlights.scm"),
+            tree_sitter_cmake::INJECTIONS_QUERY,
+            "",
+        ),
+        grammar!(
+            "vimscript",
+            ["vimscript", "vim"],
+            tree_sitter_vim::language(),
+            include_str!("../../queries/vim-highlights.scm"),
+            tree_sitter_vim::INJECTIONS_QUERY,
             "",
         ),
     ]
