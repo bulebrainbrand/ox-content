@@ -1,5 +1,37 @@
 # Changelog
 
+## [3.0.0-alpha.18] - 2026-08-29
+
+### Features
+
+- hydrate islands inside MDX document-props templates (#1199)
+- expose a reusable circular theme-change transition (#1198)
+- add Nu, Fish, CMake, and Vimscript grammars (#1186)
+- expose copy sizing tokens (#1180)
+- add copy link client initializer (#1178)
+
+### Bug Fixes
+
+- stop the whole page sinking dark during navigation (#1197)
+- give the docs a real mobile type scale and rhythm (#1193)
+- stop the page flashing during cross-document navigation (#1191)
+- preserve Nix-specific captures (#1185)
+- match sveltweet action contract (#1179)
+- preserve reader-chrome subpath declarations (#1176)
+- align replies placement with sveltweet (#1173)
+- harden alpha recovery workflow (#1171)
+- add alpha publish recovery workflow (#1170)
+
+### Performance
+
+- avoid duplicate theme gallery build (#1181)
+
+### Documentation
+
+- spell the YouTube tag like every other embed (#1200)
+- name every package-registry metric (#1194)
+- give every provider card a real preview (#1192)
+
 ## [3.0.0-alpha.17] - 2026-08-28
 
 ### Features
