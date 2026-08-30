@@ -13,9 +13,10 @@ mod emphasis;
 mod entity;
 mod gfm_autolink;
 mod link_target;
+mod marker_scan;
 mod scan;
 
-use self::scan::next_inline_special;
+use self::marker_scan::InlineMarkerScan;
 
 pub(in crate::parser) use self::autolink::autolink_end;
 pub(in crate::parser) use self::link_target::{
@@ -50,14 +51,6 @@ impl<'a> Parser<'a> {
         self.options.mdx
     }
 
-    fn next_inline_marker(&self, bytes: &[u8], from: usize) -> usize {
-        let special = next_inline_special(bytes, from);
-        if !self.allows_mdx_text_expression() || from >= special {
-            return special;
-        }
-        memchr(b'{', &bytes[from..special]).map_or(special, |rel| from + rel)
-    }
-
     pub(super) fn parse_inline(
         &self,
         content: &'a str,
@@ -65,7 +58,8 @@ impl<'a> Parser<'a> {
     ) -> ParseResult<Vec<'a, Node<'a>>> {
         profile_span!("parser::parse_inline");
         let bytes = content.as_bytes();
-        let first_special = self.next_inline_marker(bytes, 0);
+        let mut markers = InlineMarkerScan::new(self.allows_mdx_text_expression());
+        let first_special = markers.next(bytes, 0);
 
         // Plain text is both the most common inline shape and exactly one AST
         // node. Reserving the general four-node floor here wasted three
@@ -94,7 +88,7 @@ impl<'a> Parser<'a> {
             // one Text node. This keeps the parser on bulk byte scans for
             // prose and only enters the slower match when a real marker byte
             // has been reached.
-            pos = first_scan.take().unwrap_or_else(|| self.next_inline_marker(bytes, pos));
+            pos = first_scan.take().unwrap_or_else(|| markers.next(bytes, pos));
 
             // Fold soft line breaks into the running text node. A newline
             // with non-whitespace on both sides is a soft break with nothing
@@ -112,7 +106,7 @@ impl<'a> Parser<'a> {
                 && !matches!(bytes[pos - 1], b' ' | b'\t')
                 && !matches!(bytes[pos + 1], b' ' | b'\t' | b'\n')
             {
-                pos = self.next_inline_marker(bytes, pos + 1);
+                pos = markers.next(bytes, pos + 1);
             }
 
             if pos > start {
