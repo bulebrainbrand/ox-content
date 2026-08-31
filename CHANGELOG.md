@@ -1,5 +1,37 @@
 # Changelog
 
+## [3.0.0-beta.1] - 2026-08-31
+
+### Bug Fixes
+
+- repair the docs deploy and nightly preview under pnpm 12 (#1229)
+- stop an unpaired `][` hanging the linter forever (#1223)
+- stop a non-ASCII line after a list aborting (#1220)
+- stop a second attribute block dropping text and aborting (#1219)
+- decode attribute values once instead of escaping them twice (#1215)
+- stop truncating unquoted attribute values at the first slash (#1214)
+- stop nested brackets costing exponential time (#1210)
+- bound every nesting path, not just block quotes (#1211)
+
+### Performance
+
+- stop six scans costing quadratic time on ordinary text (#1234)
+- stop MDX braces costing quadratic time (#1228)
+- resolve git lastmod in one walk instead of one per page (#1231)
+- render across browsers instead of pages in one browser (#1232)
+- stop a run of unclosed brackets costing quadratic time (#1227)
+- stop a long line costing quadratic time (#1225)
+- resume the stable-prefix scan instead of rescanning (#1218)
+- batch SSG rendering and skip empty embeds (#1208)
+- resolve the pager by walking the sidebar, not copying it (#1217)
+- find a free footnote slug without scanning every footnote (#1216)
+- stop rescanning to the blank line per reference definition (#1212)
+- make emphasis pairing linear in delimiter count (#1213)
+
+### Documentation
+
+- refresh mizchi runtime tables
+
 ## [3.0.0-beta.0] - 2026-08-29
 
 ## [3.0.0-alpha.18] - 2026-08-29
